@@ -1,6 +1,5 @@
 /**
- * Générateur de captures d'écran de haute fidélité pour le rapport académique
- * توليد صور تجريبية عالية الدقة للمشروع والواجهة الطرفية
+ * Generateur de captures d'ecran haute precision sans emojis ni caracteres speciaux
  */
 
 import fs from 'node:fs';
@@ -32,7 +31,7 @@ function createTerminalHtml(title, terminalOutput, promptCommand) {
   body {
     background-color: #0b0f19;
     padding: 30px;
-    font-family: 'Cascadia Code', 'Fira Code', 'Consolas', 'Courier New', monospace;
+    font-family: 'Cascadia Code', 'Consolas', 'Courier New', monospace;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -40,7 +39,7 @@ function createTerminalHtml(title, terminalOutput, promptCommand) {
   .window {
     width: 950px;
     background: #141a29;
-    border-radius: 12px;
+    border-radius: 10px;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.1);
     overflow: hidden;
   }
@@ -125,53 +124,54 @@ ${terminalOutput}
 const screenshots = [
   {
     filename: '01_tests_execution.png',
-    title: 'Tests de Sécurité & Validation Cryptographique (npm test)',
+    title: 'Tests de Securite & Validation Cryptographique (npm test)',
     cmd: 'npm test',
     output: `<span class="gray">&gt; paweb-secure-student-cli@1.0.0 test
 &gt; node test.js</span>
 
-<span class="yellow">🧪 DÉBUT DES TESTS DE SÉCURITÉ ET FONCTIONNELS / بدء الاختبارات الأمنية والوظيفية...</span>
+<span class="yellow">[TEST] DEBUT DES TESTS DE SECURITE ET FONCTIONNELS...</span>
 
-Test 1 : Vérification de la dérivation de clé (scrypt) / التحقق من اشتقاق المفتاح 256 بت...
-  <span class="success">✅ Clé 256 bits dérivée avec succès / تم اشتقاق المفتاح بنجاح.</span>
-Test 2 : Chiffrement & Déchiffrement AES-256-GCM / دورة التشفير وفك التشفير...
-  <span class="success">✅ Chiffrement et déchiffrement validés avec succès / نجاح عملية التشفير وفك التشفير.</span>
-Test 3 : Génération d'un nouvel IV à chaque opération / توليد IV جديد فريد في كل عملية...
-  <span class="success">✅ Vecteur d'initialisation (IV) unique garanti pour chaque chiffrement / ضمان فرادة الـ IV.</span>
-Test 4 : Résistance aux mauvais mots de passe (Vérification Auth Tag) / كشف كلمة المرور الخاطئة...
-  <span class="success">✅ Mauvais mot de passe rejeté via l'Authentication Tag / تم رفض كلمة المرور بنجاح.</span>
-Test 5 : Détection de falsification des données chiffrées / كشف التلاعب بالبيانات المشفرة...
-  <span class="success">✅ Altération de données détectée avec succès / تم كشف محاولة التلاعب بالبيانات.</span>
-Test 6 : Test de bout en bout du stockage étudiant (Zero Plain Text) / التحقق من انعدام النص الصريح...
-  <span class="success">✅ Confirmation : Zéro texte en clair présent sur le disque local / تأكيد خلو القرص من النصوص الصريحة.</span>
-Test 7 : Recherche, consultation et suppression d'étudiant / اختبار البحث والحذف...
-  <span class="success">✅ Fonctions d'ajout, recherche et suppression validées / تم التحقق من كافة الدوال الوظيفية.</span>
+Test 1 : Verification de la derivation de cle (scrypt)...
+  <span class="success">[OK] Cle 256 bits derivee avec succes.</span>
+Test 2 : Chiffrement & Dechiffrement AES-256-GCM (Aller-retour)...
+  <span class="success">[OK] Chiffrement et dechiffrement valides avec succes.</span>
+Test 3 : Generation d'un nouvel IV a chaque operation...
+  <span class="success">[OK] Vecteur d'initialisation (IV) unique garanti pour chaque chiffrement.</span>
+Test 4 : Resistance aux mauvais mots de passe (Verification Auth Tag)...
+  <span class="success">[OK] Mauvais mot de passe rejete via l'Authentication Tag.</span>
+Test 5 : Detection de falsification des donnees chiffrees (Integrite)...
+  <span class="success">[OK] Alteration de donnees detectee avec succes (Integrite preservee).</span>
+Test 6 : Test de bout en bout du stockage etudiant (Zero Plain Text)...
+  <span class="success">[OK] Confirmation : Zero texte en clair present sur le disque local.</span>
+Test 7 : Recherche, consultation et suppression d'etudiant...
+  <span class="success">[OK] Fonctions d'ajout, recherche et suppression validees.</span>
+
+<span class="gray">[INFO] Fichier de test temporaire nettoye.</span>
 
 <span class="cyan">=================================================================</span>
-<span class="success bold">🎉 TOUS LES TESTS CRYPTOGRAPHIQUES ET FONCTIONNELS ONT RÉUSSI !</span>
-<span class="success bold">🎉 كافة الاختبارات الأمنية والوظيفية تمت بنجاح تام وفق المعايير !</span>
+<span class="success bold">[SUCCES] TOUS LES TESTS CRYPTOGRAPHIQUES ET FONCTIONNELS ONT REUSSI !</span>
 <span class="cyan">=================================================================</span>`
   },
   {
     filename: '02_seed_initialization.png',
-    title: 'Génération de Données de Démonstration (npm run seed)',
+    title: 'Generation de Donnees de Demonstration (npm run seed)',
     cmd: 'npm run seed',
     output: `<span class="cyan">================================================================================
-   🌱 GÉNÉRATEUR DE DONNÉES DE DÉMONSTRATION / توليد بيانات طلاب تجريبية
-   Conforme au cursus L3 ISIL - Module PAWEB (المنهاج الجامعي الجزائري)
+   GENERATEUR DE DONNEES DE DEMONSTRATION (SEED)
+   Conforme au cursus L3 ISIL - Module PAWEB
 ================================================================================</span>
 
-Définissez ou entrez le mot de passe maître pour initialiser le coffre : <span class="yellow">********</span>
+Definissez ou entrez le mot de passe maitre pour initialiser le coffre : <span class="yellow">********</span>
 
-Chiffrement et insertion des enregistrements d'étudiants...
-  <span class="success">✅ Étudiant chiffré et inséré : 2024001 - SALHI Issam (18.5/20)</span>
-  <span class="success">✅ Étudiant chiffré et inséré : 2024002 - CHOUIKHA Imane (18.0/20)</span>
-  <span class="success">✅ Étudiant chiffré et inséré : 2024003 - BENALI Youcef (15.75/20)</span>
-  <span class="success">✅ Étudiant chiffré et inséré : 2024004 - MEZIANI Amine (13.5/20)</span>
-  <span class="success">✅ Étudiant chiffré et inséré : 2024005 - KACI Nadia (11.0/20)</span>
+Chiffrement et insertion des enregistrements d'etudiants...
+  <span class="success">[OK] Etudiant chiffre et insere : 2024001 - SALHI Issam (18.5/20)</span>
+  <span class="success">[OK] Etudiant chiffre et insere : 2024002 - CHOUIKHA Imane (18.0/20)</span>
+  <span class="success">[OK] Etudiant chiffre et insere : 2024003 - BENALI Youcef (15.75/20)</span>
+  <span class="success">[OK] Etudiant chiffre et insere : 2024004 - MEZIANI Amine (13.5/20)</span>
+  <span class="success">[OK] Etudiant chiffre et insere : 2024005 - KACI Nadia (11.0/20)</span>
 
-<span class="success bold">🎉 Base de données chiffrée initialisée avec succès !</span>
-Fichier protégé par AES-256-GCM : <span class="purple">C:\\paweb-secure-student-cli\\data\\students_vault.enc.json</span>
+<span class="success bold">[SUCCES] Base de donnees chiffree initialisee avec succes !</span>
+Fichier protege par AES-256-GCM : <span class="purple">C:\\paweb-secure-student-cli\\data\\students_vault.enc.json</span>
 Vous pouvez maintenant lancer : <span class="cyan">secure-student-cli list</span>`
   },
   {
@@ -179,7 +179,7 @@ Vous pouvez maintenant lancer : <span class="cyan">secure-student-cli list</span
     title: 'Menu Interactif Principal (secure-student-cli)',
     cmd: 'secure-student-cli',
     output: `<span class="cyan">================================================================================
-   🔐 SECURE STUDENT CLI - SYSTÈME DE GESTION SÉCURISÉ D'ÉTUDIANTS
+   SECURE STUDENT CLI - SYSTEME DE GESTION SECURISE D'ETUDIANTS
    Chiffrement Militaire AES-256-GCM | 100% Hors-ligne | Zero Plain Text
    -----------------------------------------------------------------------------
    Auteurs : Salhi Issam & Chouikha Imane
@@ -187,106 +187,106 @@ Vous pouvez maintenant lancer : <span class="cyan">secure-student-cli list</span
 ================================================================================</span>
 
 <span class="yellow">================ MENU PRINCIPAL ================
-  [1] ➕ Ajouter un nouvel étudiant
-  [2] 🔍 Rechercher un étudiant
-  [3] 📋 Lister tous les étudiants & relevés
-  [4] 🎓 Relevé de notes officiel (Bulletin)
-  [5] 🗑️  Supprimer un étudiant
-  [6] 🛡️  Statut du coffre et sécurité
-  [7] 🚪 Quitter l'application
+  [1] Ajouter un nouvel etudiant
+  [2] Rechercher un etudiant
+  [3] Lister tous les etudiants et releves
+  [4] Releve de notes officiel (Bulletin)
+  [5] Supprimer un etudiant
+  [6] Statut du coffre et securite
+  [7] Quitter l'application
 ================================================</span>
-Sélectionnez une option [1-7] : <span class="cmd">_</span>`
+Selectionnez une option [1-7] : <span class="cmd">_</span>`
   },
   {
     filename: '04_list_and_stats.png',
     title: 'Consultation des Dossiers et Statistiques de Promotion (secure-student-cli list)',
     cmd: 'secure-student-cli list',
-    output: `🔑 Entrez le mot de passe maître pour déverrouiller le coffre : <span class="yellow">********</span>
+    output: `Entrez le mot de passe maitre pour deverrouiller le coffre : <span class="yellow">********</span>
 
-<span class="cyan">--- LISTE GLOBALE DES ÉTUDIANTS (5 enregistrement(s)) ---</span>
+<span class="cyan">--- LISTE GLOBALE DES ETUDIANTS (5 enregistrement(s)) ---</span>
 
-  ┌──────────────────────────────────────────────────────────┐
-  │ MATRICULE / ID : <span class="bold">2024001</span>                                │
-  │ NOM & PRÉNOM   : <span class="bold">SALHI Issam</span>                            │
-  │ FILIÈRE        : L3 ISIL                                │
-  │ MODULE         : PAWEB                                  │
-  │ NOTE / MOYENNE : <span class="success">18.50 / 20 (Très Bien)</span>                 │
-  │ DATE D'AJOUT   : 2026-11-11T00:50:00.000Z               │
-  └──────────────────────────────────────────────────────────┘
-  ┌──────────────────────────────────────────────────────────┐
-  │ MATRICULE / ID : <span class="bold">2024002</span>                                │
-  │ NOM & PRÉNOM   : <span class="bold">CHOUIKHA Imane</span>                         │
-  │ FILIÈRE        : L3 ISIL                                │
-  │ MODULE         : PAWEB                                  │
-  │ NOTE / MOYENNE : <span class="success">18.00 / 20 (Très Bien)</span>                 │
-  │ DATE D'AJOUT   : 2026-11-11T00:50:00.000Z               │
-  └──────────────────────────────────────────────────────────┘
+  +----------------------------------------------------------+
+  | MATRICULE / ID : <span class="bold">2024001</span>                                 |
+  | NOM & PRENOM   : <span class="bold">SALHI Issam</span>                             |
+  | FILIERE        : L3 ISIL                                 |
+  | MODULE         : PAWEB                                   |
+  | NOTE / MOYENNE : <span class="success">18.50 / 20 (Tres Bien)</span>                  |
+  | DATE D'AJOUT   : 2026-11-11T00:50:00.000Z                |
+  +----------------------------------------------------------+
+  +----------------------------------------------------------+
+  | MATRICULE / ID : <span class="bold">2024002</span>                                 |
+  | NOM & PRENOM   : <span class="bold">CHOUIKHA Imane</span>                          |
+  | FILIERE        : L3 ISIL                                 |
+  | MODULE         : PAWEB                                   |
+  | NOTE / MOYENNE : <span class="success">18.00 / 20 (Tres Bien)</span>                  |
+  | DATE D'AJOUT   : 2026-11-11T00:50:00.000Z                |
+  +----------------------------------------------------------+
 
-  <span class="yellow">📊 STATISTIQUES DE LA PROMOTION (L3 ISIL) :</span>
+  <span class="yellow">STATISTIQUES DE LA PROMOTION (L3 ISIL) :</span>
   --------------------------------------------------
-  • Effectif total       : <span class="cyan">5 étudiant(s)</span>
-  • Moyenne générale     : <span class="success">15.35 / 20</span>
-  • Note maximale        : <span class="success">18.50 / 20 (SALHI Issam)</span>
-  • Note minimale        : <span class="yellow">11.00 / 20 (KACI Nadia)</span>
+  - Effectif total       : <span class="cyan">5 etudiant(s)</span>
+  - Moyenne generale     : <span class="success">15.35 / 20</span>
+  - Note maximale        : <span class="success">18.50 / 20 (SALHI Issam)</span>
+  - Note minimale        : <span class="yellow">11.00 / 20 (KACI Nadia)</span>
   --------------------------------------------------`
   },
   {
     filename: '05_official_transcript.png',
-    title: 'Génération du Relevé de Notes Officiel (secure-student-cli transcript "2024001")',
+    title: 'Generation du Releve de Notes Officiel (secure-student-cli transcript "2024001")',
     cmd: 'secure-student-cli transcript "2024001"',
-    output: `🔑 Entrez le mot de passe maître pour déverrouiller le coffre : <span class="yellow">********</span>
+    output: `Entrez le mot de passe maitre pour deverrouiller le coffre : <span class="yellow">********</span>
 
-  <span class="cyan">╔══════════════════════════════════════════════════════════════╗
-  ║           RÉPUBLIQUE ALGÉRIENNE DÉMOCRATIQUE ET POPULAIRE    ║
-  ║           MINISTÈRE DE L'ENSEIGNEMENT SUPÉRIEUR ET DE LA R.S ║
-  ║                 RELEVÉ DE NOTES OFFICIEL - 2025/2026         ║
-  ╠══════════════════════════════════════════════════════════════╣</span>
-  ║ <span class="yellow">INFORMATIONS DE L'ÉTUDIANT :</span>                                 ║
-  ║   • Matricule / ID : <span class="bold">2024001</span>                               ║
-  ║   • Nom de Famille : <span class="bold">SALHI</span>                                 ║
-  ║   • Prénom         : <span class="bold">Issam</span>                                 ║
-  ║   • Filière / Cycle: <span class="bold">L3 ISIL (Systèmes d'Information)</span>      ║
-  ╠══════════════════════════════════════════════════════════════╣
-  ║ <span class="yellow">RÉSULTATS PÉDAGOGIQUES :</span>                                     ║
-  ║   • Module d'Enseignement : <span class="bold">PAWEB (Prog & App Web)</span>        ║
-  ║   • Note Finale / Moyenne : <span class="success bold">18.50 / 20.00</span>                  ║
-  ║   • Mention Attribuée     : <span class="success bold">Très Bien</span>                      ║
-  ║   • Décision du Jury      : <span class="success bold">VALIDÉ (ADMIS EN MASTER)</span>       ║
-  ╠══════════════════════════════════════════════════════════════╣
-  ║ <span class="yellow">SÉCURITÉ CRYPTOGRAPHIQUE :</span>                                   ║
-  ║   • Signature Coffre-Fort : <span class="purple">AES-256-GCM Authentifié (128-bit)</span>║
-  ║   • Date d'Horodatage     : <span class="gray">2026-11-11T00:50:00.000Z</span>        ║
-  <span class="cyan">╚══════════════════════════════════════════════════════════════╝</span>`
+  <span class="cyan">==============================================================
+             REPUBLIQUE ALGERIENNE DEMOCRATIQUE ET POPULAIRE
+             MINISTERE DE L'ENSEIGNEMENT SUPERIEUR ET DE LA R.S
+                   RELEVE DE NOTES OFFICIEL - 2025/2026
+  ==============================================================</span>
+  <span class="yellow">INFORMATIONS DE L'ETUDIANT :</span>
+    * Matricule / ID : <span class="bold">2024001</span>
+    * Nom de Famille : <span class="bold">SALHI</span>
+    * Prenom         : <span class="bold">Issam</span>
+    * Filiere / Cycle: <span class="bold">L3 ISIL (Systemes d'Information)</span>
+  --------------------------------------------------------------
+  <span class="yellow">RESULTATS PEDAGOGIQUES :</span>
+    * Module d'Enseignement : <span class="bold">PAWEB (Prog & App Web)</span>
+    * Note Finale / Moyenne : <span class="success bold">18.50 / 20.00</span>
+    * Mention Attribuee     : <span class="success bold">Tres Bien</span>
+    * Decision du Jury      : <span class="success bold">VALIDE (ADMIS EN MASTER)</span>
+  --------------------------------------------------------------
+  <span class="yellow">SECURITE CRYPTOGRAPHIQUE :</span>
+    * Signature Coffre-Fort : <span class="purple">AES-256-GCM Authentifie (128-bit)</span>
+    * Date d'Horodatage     : <span class="gray">2026-11-11T00:50:00.000Z</span>
+  <span class="cyan">==============================================================</span>`
   },
   {
     filename: '06_search_student.png',
-    title: 'Recherche Instantanée par Nom ou Matricule (secure-student-cli search "SALHI")',
+    title: 'Recherche Instantanee par Nom ou Matricule (secure-student-cli search "SALHI")',
     cmd: 'secure-student-cli search "SALHI"',
-    output: `🔑 Entrez le mot de passe maître pour déverrouiller le coffre : <span class="yellow">********</span>
+    output: `Entrez le mot de passe maitre pour deverrouiller le coffre : <span class="yellow">********</span>
 
-<span class="cyan">--- RÉSULTATS DE RECHERCHE POUR "SALHI" (1 trouvé(s)) ---</span>
+<span class="cyan">--- RESULTATS DE RECHERCHE POUR "SALHI" (1 trouve(s)) ---</span>
 
-  ┌──────────────────────────────────────────────────────────┐
-  │ MATRICULE / ID : <span class="bold">2024001</span>                                │
-  │ NOM & PRÉNOM   : <span class="bold">SALHI Issam</span>                            │
-  │ FILIÈRE        : L3 ISIL                                │
-  │ MODULE         : PAWEB                                  │
-  │ NOTE / MOYENNE : <span class="success">18.50 / 20 (Très Bien)</span>                 │
-  │ DATE D'AJOUT   : 2026-11-11T00:50:00.000Z               │
-  └──────────────────────────────────────────────────────────┘`
+  +----------------------------------------------------------+
+  | MATRICULE / ID : <span class="bold">2024001</span>                                 |
+  | NOM & PRENOM   : <span class="bold">SALHI Issam</span>                             |
+  | FILIERE        : L3 ISIL                                 |
+  | MODULE         : PAWEB                                   |
+  | NOTE / MOYENNE : <span class="success">18.50 / 20 (Tres Bien)</span>                  |
+  | DATE D'AJOUT   : 2026-11-11T00:50:00.000Z                |
+  +----------------------------------------------------------+`
   },
   {
     filename: '07_security_status.png',
-    title: 'Audit des Paramètres Cryptographiques & Statut du Coffre (secure-student-cli status)',
+    title: 'Audit des Parametres Cryptographiques & Statut du Coffre (secure-student-cli status)',
     cmd: 'secure-student-cli status',
-    output: `<span class="cyan">--- STATUT DU COFFRE-FORT DE SÉCURITÉ ---</span>
-• Emplacement du fichier : <span class="purple">C:\\paweb-secure-student-cli\\data\\students_vault.enc.json</span>
-• État du stockage       : <span class="success">Chiffré sur disque (AES-256-GCM actif)</span>
-• Algorithme             : <span class="bold">AES-256-GCM (Authenticated Encryption with Associated Data)</span>
-• Dérivation de Clé      : <span class="bold">scryptSync (Memory-hard KDF, N=16384, r=8, p=1)</span>
-• Vecteur d'init. (IV)   : <span class="yellow">96 bits (12 octets) aléatoire généré à chaque écriture</span>
-• Protection Intégrité   : <span class="success">Authentication Tag 128 bits (Garantie Anti-Tampering)</span>
-• Connexion Réseau       : <span class="success bold">0 API Web (100% Fonctionnement Hors-ligne local)</span>`
+    output: `<span class="cyan">--- STATUT DU COFFRE-FORT DE SECURITE ---</span>
+- Emplacement du fichier : <span class="purple">C:\\paweb-secure-student-cli\\data\\students_vault.enc.json</span>
+- Etat du stockage       : <span class="success">Chiffre sur disque (AES-256-GCM actif)</span>
+- Algorithme             : <span class="bold">AES-256-GCM (Authenticated Encryption with Associated Data)</span>
+- Derivation de Cle      : <span class="bold">scryptSync (Memory-hard KDF, N=16384, r=8, p=1)</span>
+- Vecteur d'init. (IV)   : <span class="yellow">96 bits (12 octets) aleatoire genere a chaque ecriture</span>
+- Protection Integrite   : <span class="success">Authentication Tag 128 bits (Garantie Anti-Tampering)</span>
+- Connexion Reseau       : <span class="success bold">0 API Web (100% Fonctionnement Hors-ligne local)</span>`
   },
   {
     filename: '08_raw_encrypted_vault.png',
@@ -301,11 +301,11 @@ Sélectionnez une option [1-7] : <span class="cmd">_</span>`
   <span class="cyan">"createdAt"</span>: <span class="yellow">"2026-11-11T00:50:00.000Z"</span>
 <span class="gray">}</span>
 
-<span class="success bold">🔒 AUDIT CONFORME : AUCUN NOM, AUCUNE NOTE ET AUCUN MATRICULE EN CLAIR SUR LE DISQUE !</span>`
+<span class="success bold">[OK] AUDIT CONFORME : AUCUN NOM, AUCUNE NOTE ET AUCUN MATRICULE EN CLAIR SUR LE DISQUE !</span>`
   }
 ];
 
-console.log('📸 GÉNÉRATION DES CAPTURES D\'ÉCRAN DE HAUTE PRÉCISION EN COURS...');
+console.log('Regeneration des captures d\'ecran...');
 
 for (const sc of screenshots) {
   const htmlPath = path.join(TEMP_HTML_DIR, sc.filename.replace('.png', '.html'));
@@ -314,13 +314,11 @@ for (const sc of screenshots) {
 
   fs.writeFileSync(htmlPath, htmlContent, 'utf8');
 
-  // Rendu Headless via Microsoft Edge
   const command = `"${edgePath}" --headless --disable-gpu --window-size=1020,680 --screenshot="${pngPath}" "${htmlPath}"`;
   execSync(command);
 
-  console.log(`  ✅ Capture enregistrée : assets/screenshots/${sc.filename}`);
+  console.log(`  Capture mise a jour : assets/screenshots/${sc.filename}`);
 }
 
-// Nettoyage des fichiers HTML temporaires
 fs.rmSync(TEMP_HTML_DIR, { recursive: true, force: true });
-console.log('\n🎉 TOUTES LES CAPTURES D\'ÉCRAN ONT ÉTÉ GÉNÉRÉES AVEC SUCCÈS DANS assets/screenshots/ !');
+console.log('Captures terminees.');

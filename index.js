@@ -4,10 +4,10 @@
  * ============================================================================
  * SECURE STUDENT CLI - INTERFACE EN LIGNE DE COMMANDE (CLI)
  * ============================================================================
- * Sujet 2 : Gestionnaire sécurisé de dossiers et relevés de notes d'étudiants
+ * Sujet 2 : Gestionnaire securise de dossiers et releves de notes d'etudiants
  * Auteurs : Salhi Issam & Chouikha Imane
- * Niveau   : 3ème année L3 ISIL - Module PAWEB
- * Chiffrement : AES-256-GCM strictly | Dérivation de clé : scryptSync
+ * Niveau   : 3eme annee L3 ISIL - Module PAWEB
+ * Chiffrement : AES-256-GCM strictly | Derivation de cle : scryptSync
  * ============================================================================
  */
 
@@ -23,11 +23,11 @@ import {
 } from './src/studentService.js';
 import { askQuestion, askPassword } from './src/prompt.js';
 
-// En-tête d'accueil stylisé
+// En-tete d'accueil standard sans emojis
 function displayBanner() {
   console.log(`
 ================================================================================
-   🔐 SECURE STUDENT CLI - SYSTÈME DE GESTION SÉCURISÉ D'ÉTUDIANTS
+   SECURE STUDENT CLI - SYSTEME DE GESTION SECURISE D'ETUDIANTS
    Chiffrement Militaire AES-256-GCM | 100% Hors-ligne | Zero Plain Text
    -----------------------------------------------------------------------------
    Auteurs : Salhi Issam & Chouikha Imane
@@ -36,99 +36,95 @@ function displayBanner() {
 }
 
 /**
- * Demande et valide le mot de passe maître de l'utilisateur.
- * Si le coffre n'existe pas encore, invite à définir un nouveau mot de passe avec confirmation.
- * 
- * ملاحظة بالعربية (Note en Arabe) :
- * التحقق من كلمة المرور الرئيسية. إذا كان النظام يُشغّل لأول مرة،
- * يُطلب من المستخدم تحديد كلمة مرور جديدة وتأكيدها.
+ * Demande et valide le mot de passe maitre de l'utilisateur.
+ * Si le coffre n'existe pas encore, invite a definir un nouveau mot de passe avec confirmation.
  */
 async function getMasterPassword() {
   const exists = vaultExists();
 
   if (!exists) {
-    console.log('\n[INFO] Aucun coffre-fort chiffré détecté.');
-    console.log('Veuillez initialiser votre mot de passe maître pour protéger la base de données :');
+    console.log('\n[INFO] Aucun coffre-fort chiffre detecte.');
+    console.log('Veuillez initialiser votre mot de passe maitre pour proteger la base de donnees :');
 
     while (true) {
-      const p1 = await askPassword('Nouveau mot de passe maître : ');
+      const p1 = await askPassword('Nouveau mot de passe maitre : ');
       if (!p1 || p1.length < 6) {
-        console.log('⚠️ Le mot de passe doit comporter au moins 6 caractères pour des raisons de sécurité.\n');
+        console.log('[ATTENTION] Le mot de passe doit comporter au moins 6 caracteres pour des raisons de securite.\n');
         continue;
       }
 
-      const p2 = await askPassword('Confirmez le mot de passe maître : ');
+      const p2 = await askPassword('Confirmez le mot de passe maitre : ');
       if (p1 !== p2) {
-        console.log('⚠️ Les mots de passe ne correspondent pas. Veuillez réessayer.\n');
+        console.log('[ATTENTION] Les mots de passe ne correspondent pas. Veuillez reessayer.\n');
         continue;
       }
 
-      console.log('✅ Mot de passe maître configuré avec succès !\n');
+      console.log('[OK] Mot de passe maitre configure avec succes !\n');
       return p1;
     }
   }
 
-  // Si le coffre existe déjà
-  const pwd = await askPassword('🔑 Entrez le mot de passe maître pour déverrouiller le coffre : ');
+  // Si le coffre existe deja
+  const pwd = await askPassword('Entrez le mot de passe maitre pour deverrouiller le coffre : ');
   if (!pwd) {
-    throw new Error('Le mot de passe maître ne peut pas être vide.');
+    throw new Error('Le mot de passe maitre ne peut pas etre vide.');
   }
   return pwd;
 }
 
 /**
- * Action : Ajouter un étudiant
+ * Action : Ajouter un etudiant
  */
 async function handleAdd(password) {
-  console.log('\n--- AJOUT D\'UN NOUVEL ÉTUDIANT ---');
-  const id = await askQuestion('Matricule / Identifiant étudiant (ex: 2024001) : ');
+  console.log('\n--- AJOUT D\'UN NOUVEL ETUDIANT ---');
+  const id = await askQuestion('Matricule / Identifiant etudiant (ex: 2024001) : ');
   if (!id) {
-    console.log('❌ Le matricule est obligatoire.');
+    console.log('[ERREUR] Le matricule est obligatoire.');
     return;
   }
 
   const nom = await askQuestion('Nom de famille (ex: BENALI) : ');
   if (!nom) {
-    console.log('❌ Le nom est obligatoire.');
+    console.log('[ERREUR] Le nom est obligatoire.');
     return;
   }
 
-  const prenom = await askQuestion('Prénom (ex: Mohamed) : ');
+  const prenom = await askQuestion('Prenom (ex: Mohamed) : ');
   if (!prenom) {
-    console.log('❌ Le prénom est obligatoire.');
+    console.log('[ERREUR] Le prenom est obligatoire.');
     return;
   }
 
-  const filiere = (await askQuestion('Filière [L3 ISIL] : ')) || 'L3 ISIL';
+  const filiere = (await askQuestion('Filiere [L3 ISIL] : ')) || 'L3 ISIL';
   const module = (await askQuestion('Module [PAWEB] : ')) || 'PAWEB';
 
   const noteStr = await askQuestion('Note / Moyenne sur 20 (ex: 16.5) : ');
   const grade = Number.parseFloat(noteStr);
   if (Number.isNaN(grade) || grade < 0 || grade > 20) {
-    console.log('❌ La note doit être un nombre valide entre 0 et 20.');
+    console.log('[ERREUR] La note doit etre un nombre valide entre 0 et 20.');
     return;
   }
 
   const student = addStudent({ id, nom, prenom, filiere, module, grade }, password);
-  console.log('\n✅ Étudiant chiffré avec succès et enregistré dans le coffre-fort !');
+  console.log('\n[OK] Etudiant chiffre avec succes et enregistre dans le coffre-fort !');
   console.log(formatStudent(student));
 }
 
 /**
- * Action : Rechercher un étudiant
+ * Action : Rechercher un etudiant
  */
 async function handleSearch(password, initialQuery = null) {
-  const query = initialQuery || (await askQuestion('\n🔍 Entrez le matricule, nom ou prénom à rechercher : '));
+  const query = initialQuery || (await askQuestion('\nEntrez le matricule, nom ou prenom a rechercher : '));
   if (!query) {
-    console.log('❌ La requête de recherche ne peut pas être vide.');
+    console.log('[ERREUR] La requete de recherche ne peut pas etre vide.');
     return;
   }
 
   const results = searchStudents(query, password);
-  console.log(`\n--- RÉSULTATS DE RECHERCHE POUR "${query}" (${results.length} trouvé(s)) ---`);
+  console.log(`\n--- RESULTATS DE RECHERCHE POUR "${query}" (${results.length} trouve(s)) ---`);
 
   if (results.length === 0) {
-    console.log('Aucun étudiant ne correspond à vos critères de recherche.');
+    console.log('Aucun etudiant ne correspond a vos criteres de recherche.');
     return;
   }
 
@@ -138,14 +134,14 @@ async function handleSearch(password, initialQuery = null) {
 }
 
 /**
- * Action : Lister tous les étudiants
+ * Action : Lister tous les etudiants
  */
 async function handleList(password) {
   const { students, stats } = listAllStudents(password);
-  console.log(`\n--- LISTE GLOBALE DES ÉTUDIANTS (${stats.count} enregistrement(s)) ---`);
+  console.log(`\n--- LISTE GLOBALE DES ETUDIANTS (${stats.count} enregistrement(s)) ---`);
 
   if (students.length === 0) {
-    console.log('Le coffre-fort ne contient actuellement aucun étudiant.');
+    console.log('Le coffre-fort ne contient actuellement aucun etudiant.');
     return;
   }
 
@@ -154,28 +150,28 @@ async function handleList(password) {
   }
 
   console.log(`
-  📊 STATISTIQUES DE LA PROMOTION :
+  STATISTIQUES DE LA PROMOTION :
   --------------------------------------------------
-  • Effectif total       : ${stats.count} étudiant(s)
-  • Moyenne générale     : ${stats.moyenneGenerale} / 20
-  • Note maximale        : ${stats.maxNote} / 20
-  • Note minimale        : ${stats.minNote} / 20
+  - Effectif total       : ${stats.count} etudiant(s)
+  - Moyenne generale     : ${stats.moyenneGenerale} / 20
+  - Note maximale        : ${stats.maxNote} / 20
+  - Note minimale        : ${stats.minNote} / 20
   --------------------------------------------------`);
 }
 
 /**
- * Action : Afficher un relevé de notes officiel (Bulletin)
+ * Action : Afficher un releve de notes officiel (Bulletin)
  */
 async function handleTranscript(password, initialId = null) {
-  const id = initialId || (await askQuestion('\n🎓 Entrez le matricule de l\'étudiant pour le relevé : '));
+  const id = initialId || (await askQuestion('\nEntrez le matricule de l\'etudiant pour le releve : '));
   if (!id) {
-    console.log('❌ Le matricule est obligatoire.');
+    console.log('[ERREUR] Le matricule est obligatoire.');
     return;
   }
 
   const student = getStudentById(id, password);
   if (!student) {
-    console.log(`❌ Aucun étudiant trouvé avec le matricule "${id}".`);
+    console.log(`[ERREUR] Aucun etudiant trouve avec le matricule "${id}".`);
     return;
   }
 
@@ -183,49 +179,49 @@ async function handleTranscript(password, initialId = null) {
 }
 
 /**
- * Action : Supprimer un étudiant
+ * Action : Supprimer un etudiant
  */
 async function handleDelete(password, initialId = null) {
-  const id = initialId || (await askQuestion('\n🗑️ Entrez le matricule de l\'étudiant à supprimer : '));
+  const id = initialId || (await askQuestion('\nEntrez le matricule de l\'etudiant a supprimer : '));
   if (!id) {
-    console.log('❌ Le matricule est obligatoire.');
+    console.log('[ERREUR] Le matricule est obligatoire.');
     return;
   }
 
   const student = getStudentById(id, password);
   if (!student) {
-    console.log(`❌ Aucun étudiant trouvé avec le matricule "${id}".`);
+    console.log(`[ERREUR] Aucun etudiant trouve avec le matricule "${id}".`);
     return;
   }
 
-  const confirm = await askQuestion(`⚠️ Êtes-vous sûr de vouloir supprimer définitivement ${student.nom} ${student.prenom} (${id}) ? (o/n) : `);
+  const confirm = await askQuestion(`[ATTENTION] Etes-vous sur de vouloir supprimer definitivement ${student.nom} ${student.prenom} (${id}) ? (o/n) : `);
   if (confirm.toLowerCase() !== 'o' && confirm.toLowerCase() !== 'oui' && confirm.toLowerCase() !== 'y') {
-    console.log('Opération annulée.');
+    console.log('Operation annulee.');
     return;
   }
 
   const success = deleteStudent(id, password);
   if (success) {
-    console.log(`\n✅ L'étudiant "${id}" a été supprimé avec succès. Le coffre a été ré-encrypté avec un nouvel IV.`);
+    console.log(`\n[OK] L'etudiant "${id}" a ete supprime avec succes. Le coffre a ete re-chiffre avec un nouvel IV.`);
   } else {
-    console.log('❌ Échec de la suppression.');
+    console.log('[ERREUR] Echec de la suppression.');
   }
 }
 
 /**
- * Action : Afficher les détails de sécurité et statut du coffre
+ * Action : Afficher les details de securite et statut du coffre
  */
 function handleStatus() {
   const exists = vaultExists();
   console.log(`
---- STATUT DU COFFRE-FORT DE SÉCURITÉ ---
-• Emplacement du fichier : ${getVaultPath()}
-• État du stockage       : ${exists ? 'Chiffré sur disque (AES-256-GCM actif)' : 'Non initialisé (Aucun fichier sur disque)'}
-• Algorithme             : AES-256-GCM (Authenticated Encryption)
-• Dérivation de Clé      : scryptSync (Memory-hard KDF, N=16384, r=8, p=1)
-• Vecteur d'init. (IV)   : 96 bits (12 octets) aléatoire généré à chaque écriture
-• Protection Intégrité   : Authentication Tag 128 bits
-• Connexion Réseau       : 0 API Web (100% Fonctionnement Hors-ligne local)
+--- STATUT DU COFFRE-FORT DE SECURITE ---
+- Emplacement du fichier : ${getVaultPath()}
+- Etat du stockage       : ${exists ? 'Chiffre sur disque (AES-256-GCM actif)' : 'Non initialise (Aucun fichier sur disque)'}
+- Algorithme             : AES-256-GCM (Authenticated Encryption)
+- Derivation de Cle      : scryptSync (Memory-hard KDF, N=16384, r=8, p=1)
+- Vecteur d'init. (IV)   : 96 bits (12 octets) aleatoire genere a chaque ecriture
+- Protection Integrite   : Authentication Tag 128 bits
+- Connexion Reseau       : 0 API Web (100% Fonctionnement Hors-ligne local)
 `);
 }
 
@@ -238,16 +234,16 @@ async function interactiveMenu() {
   while (running) {
     console.log(`
 ================ MENU PRINCIPAL ================
-  [1] ➕ Ajouter un nouvel étudiant
-  [2] 🔍 Rechercher un étudiant
-  [3] 📋 Lister tous les étudiants & relevés
-  [4] 🎓 Relevé de notes officiel (Bulletin)
-  [5] 🗑️  Supprimer un étudiant
-  [6] 🛡️  Statut du coffre et sécurité
-  [7] 🚪 Quitter l'application
+  [1] Ajouter un nouvel etudiant
+  [2] Rechercher un etudiant
+  [3] Lister tous les etudiants et releves
+  [4] Releve de notes officiel (Bulletin)
+  [5] Supprimer un etudiant
+  [6] Statut du coffre et securite
+  [7] Quitter l'application
 ================================================`);
 
-    const choice = await askQuestion('Sélectionnez une option [1-7] : ');
+    const choice = await askQuestion('Selectionnez une option [1-7] : ');
 
     try {
       switch (choice) {
@@ -281,21 +277,21 @@ async function interactiveMenu() {
           break;
         }
         case '7': {
-          console.log('\n🔒 Fermeture sécurisée de l\'application. À bientôt !');
+          console.log('\n[INFO] Fermeture securisee de l\'application. Au revoir.');
           running = false;
           break;
         }
         default:
-          console.log('⚠️ Option invalide. Veuillez saisir un chiffre entre 1 et 7.');
+          console.log('[ATTENTION] Option invalide. Veuillez saisir un chiffre entre 1 et 7.');
           break;
       }
     } catch (err) {
       if (err.code === 'ERR_CRYPTO_AUTH_FAILED') {
-        console.log('\n🚨 ERREUR CRITIQUE DE SÉCURITÉ :');
-        console.log('Mot de passe maître incorrect ou intégrité du fichier violée.');
-        console.log('Détail technique : Échec de validation de l\'Authentication Tag AES-GCM.\n');
+        console.log('\n[ERREUR CRITIQUE DE SECURITE]');
+        console.log('Mot de passe maitre incorrect ou integrite du fichier violee.');
+        console.log('Detail technique : Echec de validation de l\'Authentication Tag AES-GCM.\n');
       } else {
-        console.log(`\n❌ ERREUR : ${err.message}\n`);
+        console.log(`\n[ERREUR] : ${err.message}\n`);
       }
     }
   }
@@ -307,13 +303,13 @@ async function interactiveMenu() {
 function displayHelp() {
   console.log(`
 UTILISATION :
-  secure-student-cli                     Lance l'interface interactive complète
-  secure-student-cli add                 Ajoute un étudiant directement
-  secure-student-cli list                Affiche tous les relevés de notes
-  secure-student-cli search <query>      Recherche un étudiant par identifiant ou nom
-  secure-student-cli transcript <id>     Affiche le bulletin officiel d'un étudiant
-  secure-student-cli delete <id>         Supprime un étudiant du coffre
-  secure-student-cli status              Affiche les paramètres de sécurité cryptographiques
+  secure-student-cli                     Lance l'interface interactive complete
+  secure-student-cli add                 Ajoute un etudiant directement
+  secure-student-cli list                Affiche tous les releves de notes
+  secure-student-cli search <query>      Recherche un etudiant par identifiant ou nom
+  secure-student-cli transcript <id>     Affiche le bulletin officiel d'un etudiant
+  secure-student-cli delete <id>         Supprime un etudiant du coffre
+  secure-student-cli status              Affiche les parametres de securite cryptographiques
   secure-student-cli --help, -h          Affiche cette documentation d'aide
 
 EXEMPLES :
@@ -328,7 +324,7 @@ EXEMPLES :
 }
 
 /**
- * Point d'entrée principal (Main)
+ * Point d'entree principal (Main)
  */
 async function main() {
   const args = process.argv.slice(2);
@@ -382,19 +378,19 @@ async function main() {
         break;
       }
       default: {
-        console.log(`⚠️ Commande inconnue : "${command}"`);
+        console.log(`[ATTENTION] Commande inconnue : "${command}"`);
         displayHelp();
         break;
       }
     }
   } catch (err) {
     if (err.code === 'ERR_CRYPTO_AUTH_FAILED') {
-      console.log('\n🚨 ERREUR CRITIQUE DE SÉCURITÉ :');
-      console.log('Mot de passe maître incorrect ou intégrité du fichier violée.');
-      console.log('Détail technique : Échec de validation de l\'Authentication Tag AES-GCM.\n');
+      console.log('\n[ERREUR CRITIQUE DE SECURITE]');
+      console.log('Mot de passe maitre incorrect ou integrite du fichier violee.');
+      console.log('Detail technique : Echec de validation de l\'Authentication Tag AES-GCM.\n');
       process.exit(1);
     } else {
-      console.log(`\n❌ ERREUR : ${err.message}\n`);
+      console.log(`\n[ERREUR] : ${err.message}\n`);
       process.exit(1);
     }
   }

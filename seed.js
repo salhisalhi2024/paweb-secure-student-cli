@@ -1,9 +1,8 @@
 /**
  * ============================================================================
- * SCRIPT DE DÉMONSTRATION PÉDAGOGIQUE (SEED DATA)
- * نص برمجي لإنشاء بيانات تجريبية فورية للتقييم الأكاديمي
+ * SCRIPT DE DEMONSTRATION PEDAGOGIQUE (SEED DATA)
  * ============================================================================
- * Auteurs / المؤلفون : Salhi Issam & Chouikha Imane (L3 ISIL - Module PAWEB)
+ * Auteurs : Salhi Issam & Chouikha Imane (L3 ISIL - Module PAWEB)
  * ============================================================================
  */
 
@@ -13,8 +12,8 @@ import { askPassword } from './src/prompt.js';
 
 console.log(`
 ================================================================================
-   🌱 GÉNÉRATEUR DE DONNÉES DE DÉMONSTRATION / توليد بيانات طلاب تجريبية
-   Conforme au cursus L3 ISIL - Module PAWEB (المنهاج الجامعي الجزائري)
+   GENERATEUR DE DONNEES DE DEMONSTRATION (SEED)
+   Conforme au cursus L3 ISIL - Module PAWEB
 ================================================================================`);
 
 const sampleStudents = [
@@ -26,26 +25,25 @@ const sampleStudents = [
 ];
 
 async function run() {
-  const pwd = await askPassword('Définissez ou entrez le mot de passe maître pour initialiser le coffre : ');
+  const pwd = await askPassword('Definissez ou entrez le mot de passe maitre pour initialiser le coffre : ');
   if (!pwd || pwd.length < 6) {
-    console.log('❌ Le mot de passe doit comporter au moins 6 caractères.');
+    console.log('[ERREUR] Le mot de passe doit comporter au moins 6 caracteres.');
     process.exit(1);
   }
 
-  console.log('\nChiffrement et insertion des enregistrements d\'étudiants...');
+  console.log('\nChiffrement et insertion des enregistrements d\'etudiants...');
   for (const s of sampleStudents) {
     try {
       addStudent(s, pwd);
-      console.log(`  ✅ Étudiant chiffré et inséré : ${s.id} - ${s.nom} ${s.prenom} (${s.grade}/20)`);
+      console.log(`  [OK] Etudiant chiffre et insere : ${s.id} - ${s.nom} ${s.prenom} (${s.grade}/20)`);
     } catch (err) {
-      console.log(`  ⚠️ Note pour ${s.id} : ${err.message}`);
+      console.log(`  [ATTENTION] Note pour ${s.id} : ${err.message}`);
     }
   }
 
-  console.log('\n🎉 Base de données chiffrée initialisée avec succès !');
-  console.log(`Fichier protégé par AES-256-GCM : ${getVaultPath()}`);
+  console.log('\n[SUCCES] Base de donnees chiffree initialisee avec succes !');
+  console.log(`Fichier protege par AES-256-GCM : ${getVaultPath()}`);
   console.log('Vous pouvez maintenant lancer : secure-student-cli list');
 }
 
 run();
-

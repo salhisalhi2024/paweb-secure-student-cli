@@ -1,8 +1,8 @@
 /**
  * ============================================================================
- * SUITE DE TESTS AUTOMATISÉE / حزمة الاختبارات الآلية والتحقق الأمني
+ * SUITE DE TESTS AUTOMATISEE
  * ============================================================================
- * Auteurs / المؤلفون : Salhi Issam & Chouikha Imane (L3 ISIL - Module PAWEB)
+ * Auteurs : Salhi Issam & Chouikha Imane (L3 ISIL - Module PAWEB)
  * ============================================================================
  */
 
@@ -17,39 +17,39 @@ import { getVaultPath, vaultExists } from './src/storage.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-console.log('🧪 DÉBUT DES TESTS DE SÉCURITÉ ET FONCTIONNELS / بدء الاختبارات الأمنية والوظيفية...\n');
+console.log('[TEST] DEBUT DES TESTS DE SECURITE ET FONCTIONNELS...\n');
 
-// TEST 1 : Dérivation de clé avec scrypt / اختبار 1: اشتقاق المفاتيح بـ scrypt
-console.log('Test 1 : Vérification de la dérivation de clé (scrypt) / التحقق من اشتقاق المفتاح 256 بت...');
+// TEST 1 : Derivation de cle avec scrypt
+console.log('Test 1 : Verification de la derivation de cle (scrypt)...');
 const salt1 = Buffer.alloc(16, 0xaa);
 const key1 = deriveKey('MasterPass123!', salt1);
-assert.strictEqual(key1.length, 32, 'La clé dérivée doit faire exactement 32 octets (256 bits).');
-console.log('  ✅ Clé 256 bits dérivée avec succès / تم اشتقاق المفتاح بنجاح.');
+assert.strictEqual(key1.length, 32, 'La cle derivee doit faire exactement 32 octets (256 bits).');
+console.log('  [OK] Cle 256 bits derivee avec succes.');
 
-// TEST 2 : Chiffrement et Déchiffrement AES-256-GCM / اختبار 2: التشفير وفك التشفير
-console.log('Test 2 : Chiffrement & Déchiffrement AES-256-GCM / دورة التشفير وفك التشفير...');
+// TEST 2 : Chiffrement et Dechiffrement AES-256-GCM
+console.log('Test 2 : Chiffrement & Dechiffrement AES-256-GCM (Aller-retour)...');
 const secretData = JSON.stringify([{ id: '2024001', nom: 'SALHI', note: 18.5 }]);
 const payload = encryptData(secretData, 'SecretMasterPassword123');
 
-assert.ok(payload.salt, 'Le Salt doit être présent / يجب وجود الملح');
-assert.ok(payload.iv, 'Le vecteur IV doit être présent / يجب وجود متجه التهيئة');
-assert.ok(payload.authTag, 'L\'Auth Tag doit être présent / يجب وجود وسم الأصالة');
-assert.ok(payload.ciphertext, 'Le ciphertext doit être présent / يجب وجود النص المشفر');
+assert.ok(payload.salt, 'Le Salt doit etre present.');
+assert.ok(payload.iv, 'Le vecteur IV doit etre present.');
+assert.ok(payload.authTag, 'L\'Auth Tag doit etre present.');
+assert.ok(payload.ciphertext, 'Le ciphertext doit etre present.');
 
 const decrypted = decryptData(payload, 'SecretMasterPassword123');
-assert.strictEqual(decrypted, secretData, 'Les données déchiffrées doivent correspondre exactement.');
-console.log('  ✅ Chiffrement et déchiffrement validés avec succès / نجاح عملية التشفير وفك التشفير.');
+assert.strictEqual(decrypted, secretData, 'Les donnees dechiffrees doivent correspondre exactement.');
+console.log('  [OK] Chiffrement et dechiffrement valides avec succes.');
 
-// TEST 3 : Unicité de l'IV et du Salt / اختبار 3: عدم تكرار متجه التهيئة والملح
-console.log('Test 3 : Génération d\'un nouvel IV à chaque opération / توليد IV جديد فريد في كل عملية...');
-const payloadA = encryptData('Même contenu', 'MonMotDePasse');
-const payloadB = encryptData('Même contenu', 'MonMotDePasse');
+// TEST 3 : Unicite de l'IV et du Salt
+console.log('Test 3 : Generation d\'un nouvel IV a chaque operation...');
+const payloadA = encryptData('Meme contenu', 'MonMotDePasse');
+const payloadB = encryptData('Meme contenu', 'MonMotDePasse');
 assert.notStrictEqual(payloadA.iv, payloadB.iv, 'Chaque chiffrement DOIT produire un IV unique.');
-assert.notStrictEqual(payloadA.ciphertext, payloadB.ciphertext, 'Deux chiffrements identiques ne doivent pas avoir le même ciphertext.');
-console.log('  ✅ Vecteur d\'initialisation (IV) unique garanti pour chaque chiffrement / ضمان فرادة الـ IV.');
+assert.notStrictEqual(payloadA.ciphertext, payloadB.ciphertext, 'Deux chiffrements identiques ne doivent pas avoir le meme ciphertext.');
+console.log('  [OK] Vecteur d\'initialisation (IV) unique garanti pour chaque chiffrement.');
 
-// TEST 4 : Rejet d'un mauvais mot de passe / اختبار 4: رفض كلمة المرور الخاطئة
-console.log('Test 4 : Résistance aux mauvais mots de passe (Vérification Auth Tag) / كشف كلمة المرور الخاطئة...');
+// TEST 4 : Rejet d'un mauvais mot de passe
+console.log('Test 4 : Resistance aux mauvais mots de passe (Verification Auth Tag)...');
 let authFailed = false;
 try {
   decryptData(payload, 'MauvaisMotDePasse');
@@ -57,11 +57,11 @@ try {
   authFailed = true;
   assert.strictEqual(err.code, 'ERR_CRYPTO_AUTH_FAILED');
 }
-assert.ok(authFailed, 'Le déchiffrement avec un mauvais mot de passe doit obligatoirement échouer.');
-console.log('  ✅ Mauvais mot de passe rejeté via l\'Authentication Tag / تم رفض كلمة المرور بنجاح.');
+assert.ok(authFailed, 'Le dechiffrement avec un mauvais mot de passe doit obligatoirement echouer.');
+console.log('  [OK] Mauvais mot de passe rejete via l\'Authentication Tag.');
 
-// TEST 5 : Détection d'altération / اختبار 5: كشف أي تلاعب أو تعديل على الملف المشفر
-console.log('Test 5 : Détection de falsification des données chiffrées / كشف التلاعب بالبيانات المشفرة...');
+// TEST 5 : Detection d'alteration
+console.log('Test 5 : Detection de falsification des donnees chiffrees (Integrite)...');
 let tamperDetected = false;
 const tamperedPayload = { ...payload };
 const originalHex = tamperedPayload.ciphertext;
@@ -74,11 +74,11 @@ try {
   tamperDetected = true;
   assert.strictEqual(err.code, 'ERR_CRYPTO_AUTH_FAILED');
 }
-assert.ok(tamperDetected, 'Toute altération du ciphertext doit être détectée immédiatement.');
-console.log('  ✅ Altération de données détectée avec succès / تم كشف محاولة التلاعب بالبيانات.');
+assert.ok(tamperDetected, 'Toute alteration du ciphertext doit etre detectee immediatement.');
+console.log('  [OK] Alteration de donnees detectee avec succes (Integrite preservee).');
 
-// TEST 6 : Stockage sécurisé sans aucun texte en clair / اختبار 6: انعدام النص الصريح على القرص
-console.log('Test 6 : Test de bout en bout du stockage étudiant (Zero Plain Text) / التحقق من انعدام النص الصريح...');
+// TEST 6 : Stockage securise sans aucun texte en clair
+console.log('Test 6 : Test de bout en bout du stockage etudiant (Zero Plain Text)...');
 const testPassword = 'AcademicEvaluation2026!';
 const studentSample = {
   id: '2024999',
@@ -94,13 +94,13 @@ const vaultPath = getVaultPath();
 assert.ok(fs.existsSync(vaultPath), 'Le fichier de coffre-fort doit exister sur le disque.');
 
 const fileContent = fs.readFileSync(vaultPath, 'utf8');
-assert.ok(!fileContent.includes('TESTNOM'), 'Le nom de l\'étudiant NE DOIT PAS apparaître en clair sur le disque.');
-assert.ok(!fileContent.includes('TestPrenom'), 'Le prénom NE DOIT PAS apparaître en clair.');
-assert.ok(!fileContent.includes('17.25'), 'La note NE DOIT PAS apparaître en clair.');
-console.log('  ✅ Confirmation : Zéro texte en clair présent sur le disque local / تأكيد خلو القرص من النصوص الصريحة.');
+assert.ok(!fileContent.includes('TESTNOM'), 'Le nom de l\'etudiant NE DOIT PAS apparaitre en clair sur le disque.');
+assert.ok(!fileContent.includes('TestPrenom'), 'Le prenom NE DOIT PAS apparaitre en clair.');
+assert.ok(!fileContent.includes('17.25'), 'La note NE DOIT PAS apparaitre en clair.');
+console.log('  [OK] Confirmation : Zero texte en clair present sur le disque local.');
 
-// TEST 7 : Recherche, Consultation et Suppression / اختبار 7: العمليات الوظيفية
-console.log('Test 7 : Recherche, consultation et suppression d\'étudiant / اختبار البحث والحذف...');
+// TEST 7 : Recherche, Consultation et Suppression
+console.log('Test 7 : Recherche, consultation et suppression d\'etudiant...');
 const found = searchStudents('TESTNOM', testPassword);
 assert.strictEqual(found.length, 1);
 assert.strictEqual(found[0].id, '2024999');
@@ -114,15 +114,14 @@ assert.strictEqual(deleted, true);
 
 const afterDelete = searchStudents('TESTNOM', testPassword);
 assert.strictEqual(afterDelete.length, 0);
-console.log('  ✅ Fonctions d\'ajout, recherche et suppression validées / تم التحقق من كافة الدوال الوظيفية.');
+console.log('  [OK] Fonctions d\'ajout, recherche et suppression validees.');
 
-// Nettoyage du fichier de test / تنظيف ملف الاختبار المؤقت
+// Nettoyage du fichier de test
 if (fs.existsSync(vaultPath)) {
   fs.unlinkSync(vaultPath);
-  console.log('\n🧹 Fichier de test temporaire nettoyé / تم تنظيف ملف الاختبار.');
+  console.log('\n[INFO] Fichier de test temporaire nettoye.');
 }
 
 console.log('\n=================================================================');
-console.log('🎉 TOUS LES TESTS CRYPTOGRAPHIQUES ET FONCTIONNELS ONT RÉUSSI !');
-console.log('🎉 كافة الاختبارات الأمنية والوظيفية تمت بنجاح تام وفق المعايير !');
+console.log('[SUCCES] TOUS LES TESTS CRYPTOGRAPHIQUES ET FONCTIONNELS ONT REUSSI !');
 console.log('=================================================================\n');

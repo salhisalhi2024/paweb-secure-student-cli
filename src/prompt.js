@@ -1,9 +1,9 @@
 /**
  * ============================================================================
- * MODULE D'INTERACTION TERMINAL / وحدة التفاعل وقراءة المدخلات في الطرفية
+ * MODULE D'INTERACTION TERMINAL
  * ============================================================================
- * Auteurs / المؤلفون : Salhi Issam & Chouikha Imane (L3 ISIL - Module PAWEB)
- * Fonctionnalité clé / الميزة الأساسية : Saisie masquée du mot de passe (Raw Mode)
+ * Auteurs : Salhi Issam & Chouikha Imane (L3 ISIL - Module PAWEB)
+ * Fonctionnalite cle : Saisie masquee du mot de passe (Raw Mode)
  * ============================================================================
  */
 
@@ -11,10 +11,8 @@ import readline from 'node:readline';
 
 /**
  * Pose une question textuelle standard dans la console.
- * [FR] Utilise l'interface readline standard de Node.js.
- * [AR] طرح سؤال نصي قياسي على المستخدم وقراءة الإجابة.
  * 
- * @param {string} query - Question / نص السؤال
+ * @param {string} query - Question
  * @returns {Promise<string>}
  */
 export function askQuestion(query) {
@@ -32,25 +30,21 @@ export function askQuestion(query) {
 }
 
 /**
- * Invite l'utilisateur à saisir son mot de passe maître de façon sécurisée en masquant les frappes.
+ * Invite l'utilisateur a saisir son mot de passe maitre de facon securisee en masquant les frappes.
+ * Active le Raw Mode sur process.stdin pour intercepter chaque caractere sans echo direct,
+ * remplacant les caracteres saisis par des asterisques (*) pour parer au Shoulder Surfing.
  * 
- * [FR] Active le Raw Mode sur process.stdin pour intercepter chaque caractère sans écho direct,
- *      remplaçant les caractères saisis par des astérisques (*) pour parer au Shoulder Surfing.
- * [AR] قراءة كلمة المرور الرئيسية في الطرفية بشكل آمن مع إخفاء الحروف واستبدالها بنجوم (*).
- *      يتم ضبط الطرفية على الوضع الخام (Raw Mode) لمنع طباعة النص الصريح في سجل الأوامر أو الشاشة،
- *      مما يحمي المفتاح من التلصص البصري المباشر.
- * 
- * @param {string} promptMessage - Message d'invite / رسالة الطلب
- * @returns {Promise<string>} Mot de passe saisi / كلمة المرور
+ * @param {string} promptMessage - Message d'invite
+ * @returns {Promise<string>} Mot de passe saisi
  */
-export function askPassword(promptMessage = 'Entrez le mot de passe maître / أدخل كلمة المرور الرئيسية : ') {
+export function askPassword(promptMessage = 'Entrez le mot de passe maitre : ') {
   return new Promise((resolve) => {
     const stdin = process.stdin;
     const stdout = process.stdout;
 
     stdout.write(promptMessage);
 
-    // Si le terminal n'est pas un TTY (ex: script ou pipe automatisé) / إذا كان الإدخال غير تفاعلي
+    // Si le terminal n'est pas un TTY (ex: script ou pipe automatise)
     if (!stdin.isTTY) {
       const rl = readline.createInterface({ input: stdin, output: stdout });
       rl.question('', (answer) => {
@@ -60,7 +54,7 @@ export function askPassword(promptMessage = 'Entrez le mot de passe maître / أ
       return;
     }
 
-    // Activation du mode brut (Raw Mode) / تفعيل الوضع الخام لقراءة المفاتيح فرادى
+    // Activation du mode brut (Raw Mode)
     stdin.setRawMode(true);
     stdin.resume();
     stdin.setEncoding('utf8');
@@ -71,7 +65,7 @@ export function askPassword(promptMessage = 'Entrez le mot de passe maître / أ
       switch (char) {
         case '\n':
         case '\r':
-        case '\u0004': // EOT (Ctrl+D) / نهاية الإدخال
+        case '\u0004': // EOT (Ctrl+D)
           stdin.setRawMode(false);
           stdin.pause();
           stdin.removeListener('data', onData);
@@ -79,14 +73,14 @@ export function askPassword(promptMessage = 'Entrez le mot de passe maître / أ
           resolve(password);
           break;
 
-        case '\u0003': // Ctrl+C (Interruption) / إلغاء العملية والخروج
+        case '\u0003': // Ctrl+C (Interruption)
           stdin.setRawMode(false);
           stdin.pause();
-          stdout.write('\nOpération annulée par l\'utilisateur / تم إلغاء العملية.\n');
+          stdout.write('\n[INFO] Operation annulee par l\'utilisateur.\n');
           process.exit(130);
           break;
 
-        case '\u0008': // Backspace Windows / مسح حرف للخلف
+        case '\u0008': // Backspace Windows
         case '\x7f':   // Delete Linux/macOS
           if (password.length > 0) {
             password = password.slice(0, -1);
@@ -95,7 +89,7 @@ export function askPassword(promptMessage = 'Entrez le mot de passe maître / أ
           break;
 
         default:
-          // Ajout du caractère et masquage visuel par * / إضافة الحرف وعرض نجمة
+          // Ajout du caractere et masquage visuel par *
           password += char;
           stdout.write('*');
           break;

@@ -1,6 +1,7 @@
 /**
  * ============================================================================
- * SERVICE DE GESTION DES ÉTUDIANTS (STUDENT RECORD SERVICE)
+ * SERVICE DE GESTION DES ETUDIANTS (STUDENT RECORD SERVICE)
+ * ============================================================================
  * Auteurs : Salhi Issam & Chouikha Imane (L3 ISIL - Module PAWEB)
  * ============================================================================
  */
@@ -8,82 +9,81 @@
 import { loadStudents, saveStudents, vaultExists } from './storage.js';
 
 /**
- * Calcule l'appréciation / mention selon la note.
+ * Calcule l'appreciation / mention selon la note.
  * @param {number} grade 
  * @returns {string}
  */
 export function getMention(grade) {
-  if (grade >= 16) return 'Très Bien';
+  if (grade >= 16) return 'Tres Bien';
   if (grade >= 14) return 'Bien';
   if (grade >= 12) return 'Assez Bien';
   if (grade >= 10) return 'Passable';
-  return 'Ajourné';
+  return 'Ajourne';
 }
 
 /**
- * Affiche un tableau stylisé pour un étudiant.
+ * Affiche un tableau stylise pour un etudiant.
  * @param {Object} student 
  */
 export function formatStudent(student) {
   const mention = getMention(student.grade);
   return `
-  ┌──────────────────────────────────────────────────────────┐
-  │ MATRICULE / ID : ${String(student.id).padEnd(39)}│
-  │ NOM & PRÉNOM   : ${(student.nom + ' ' + student.prenom).padEnd(39)}│
-  │ FILIÈRE        : ${String(student.filiere || 'L3 ISIL').padEnd(39)}│
-  │ MODULE         : ${String(student.module || 'PAWEB').padEnd(39)}│
-  │ NOTE / MOYENNE : ${(student.grade.toFixed(2) + ' / 20 (' + mention + ')').padEnd(39)}│
-  │ DATE D'AJOUT   : ${String(student.createdAt || 'N/A').padEnd(39)}│
-  └──────────────────────────────────────────────────────────┘`;
+  +----------------------------------------------------------+
+  | MATRICULE / ID : ${String(student.id).padEnd(40)}|
+  | NOM & PRENOM   : ${(student.nom + ' ' + student.prenom).padEnd(40)}|
+  | FILIERE        : ${String(student.filiere || 'L3 ISIL').padEnd(40)}|
+  | MODULE         : ${String(student.module || 'PAWEB').padEnd(40)}|
+  | NOTE / MOYENNE : ${(student.grade.toFixed(2) + ' / 20 (' + mention + ')').padEnd(40)}|
+  | DATE D'AJOUT   : ${String(student.createdAt || 'N/A').padEnd(40)}|
+  +----------------------------------------------------------+`;
 }
 
 /**
- * Génère un relevé de notes officiel formaté façon bulletin académique.
+ * Genere un releve de notes officiel formate facon bulletin academique.
  * @param {Object} student 
  * @returns {string}
  */
 export function formatTranscript(student) {
   const mention = getMention(student.grade);
-  const status = student.grade >= 10 ? 'VALIDÉ (ADMIS)' : 'NON VALIDÉ (AJOURNÉ)';
+  const status = student.grade >= 10 ? 'VALIDE (ADMIS)' : 'NON VALIDE (AJOURNE)';
   
   return `
-  ╔══════════════════════════════════════════════════════════════╗
-  ║           RÉPUBLIQUE ALGÉRIENNE DÉMOCRATIQUE ET POPULAIRE    ║
-  ║           MINISTÈRE DE L'ENSEIGNEMENT SUPÉRIEUR ET DE LA R.S ║
-  ║                 RELEVÉ DE NOTES OFFICIEL - 2025/2026         ║
-  ╠══════════════════════════════════════════════════════════════╣
-  ║ INFORMATIONS DE L'ÉTUDIANT :                                 ║
-  ║   • Matricule / ID : ${String(student.id).padEnd(38)}║
-  ║   • Nom de Famille : ${String(student.nom).padEnd(38)}║
-  ║   • Prénom         : ${String(student.prenom).padEnd(38)}║
-  ║   • Filière / Cycle: ${String(student.filiere || 'L3 ISIL').padEnd(38)}║
-  ╠══════════════════════════════════════════════════════════════╣
-  ║ RÉSULTATS PÉDAGOGIQUES :                                     ║
-  ║   • Module d'Enseignement : ${String(student.module || 'PAWEB').padEnd(31)}║
-  ║   • Note Finale / Moyenne : ${(student.grade.toFixed(2) + ' / 20.00').padEnd(31)}║
-  ║   • Mention Attribuée     : ${mention.padEnd(31)}║
-  ║   • Décision du Jury      : ${status.padEnd(31)}║
-  ╠══════════════════════════════════════════════════════════════╣
-  ║ SÉCURITÉ CRYPTOGRAPHIQUE :                                   ║
-  ║   • Signature Coffre-Fort : AES-256-GCM Authentifié (128-bit)║
-  ║   • Date d'Horodatage     : ${String(student.createdAt).padEnd(31)}║
-  ╚══════════════════════════════════════════════════════════════╝`;
+  ==============================================================
+             REPUBLIQUE ALGERIENNE DEMOCRATIQUE ET POPULAIRE
+             MINISTERE DE L'ENSEIGNEMENT SUPERIEUR ET DE LA R.S
+                   RELEVE DE NOTES OFFICIEL - 2025/2026
+  ==============================================================
+  INFORMATIONS DE L'ETUDIANT :
+    * Matricule / ID : ${String(student.id).padEnd(41)}
+    * Nom de Famille : ${String(student.nom).padEnd(41)}
+    * Prenom         : ${String(student.prenom).padEnd(41)}
+    * Filiere / Cycle: ${String(student.filiere || 'L3 ISIL').padEnd(41)}
+  --------------------------------------------------------------
+  RESULTATS PEDAGOGIQUES :
+    * Module d'Enseignement : ${String(student.module || 'PAWEB').padEnd(34)}
+    * Note Finale / Moyenne : ${(student.grade.toFixed(2) + ' / 20.00').padEnd(34)}
+    * Mention Attribuee     : ${mention.padEnd(34)}
+    * Decision du Jury      : ${status.padEnd(34)}
+  --------------------------------------------------------------
+  SECURITE CRYPTOGRAPHIQUE :
+    * Signature Coffre-Fort : AES-256-GCM Authentifie (128-bit)
+    * Date d'Horodatage     : ${String(student.createdAt).padEnd(34)}
+  ==============================================================`;
 }
 
 /**
- * Ajoute un nouvel enregistrement étudiant dans le coffre-fort chiffré.
+ * Ajoute un nouvel enregistrement etudiant dans le coffre-fort chiffre.
  * 
- * @param {Object} studentData - Données { id, nom, prenom, filiere, module, grade }
- * @param {string} masterPassword - Mot de passe maître pour le chiffrement.
- * @returns {Object} L'étudiant ajouté.
+ * @param {Object} studentData - Donnees { id, nom, prenom, filiere, module, grade }
+ * @param {string} masterPassword - Mot de passe maitre pour le chiffrement.
+ * @returns {Object} L'etudiant ajoute.
  */
 export function addStudent(studentData, masterPassword) {
   const students = loadStudents(masterPassword);
 
-  // Vérification de l'unicité du matricule
   const exists = students.some((s) => s.id.toLowerCase() === studentData.id.toLowerCase());
   if (exists) {
-    throw new Error(`Un étudiant avec le matricule "${studentData.id}" existe déjà.`);
+    throw new Error(`Un etudiant avec le matricule "${studentData.id}" existe deja.`);
   }
 
   const newRecord = {
@@ -103,11 +103,11 @@ export function addStudent(studentData, masterPassword) {
 }
 
 /**
- * Recherche des étudiants par matricule, nom ou prénom.
+ * Recherche des etudiants par matricule, nom ou prenom.
  * 
  * @param {string} query - Terme de recherche.
- * @param {string} masterPassword - Mot de passe maître pour déchiffrer.
- * @returns {Array<Object>} Liste des étudiants correspondants.
+ * @param {string} masterPassword - Mot de passe maitre pour dechiffrer.
+ * @returns {Array<Object>} Liste des etudiants correspondants.
  */
 export function searchStudents(query, masterPassword) {
   const students = loadStudents(masterPassword);
@@ -124,10 +124,10 @@ export function searchStudents(query, masterPassword) {
 }
 
 /**
- * Récupère un étudiant par son matricule exact.
+ * Recupere un etudiant par son matricule exact.
  * 
- * @param {string} id - Matricule de l'étudiant.
- * @param {string} masterPassword - Mot de passe maître.
+ * @param {string} id - Matricule de l'etudiant.
+ * @param {string} masterPassword - Mot de passe maitre.
  * @returns {Object|null}
  */
 export function getStudentById(id, masterPassword) {
@@ -136,11 +136,11 @@ export function getStudentById(id, masterPassword) {
 }
 
 /**
- * Supprime un étudiant par son matricule et ré-encrypte le coffre.
+ * Supprime un etudiant par son matricule et re-encrypte le coffre.
  * 
- * @param {string} id - Matricule de l'étudiant à supprimer.
- * @param {string} masterPassword - Mot de passe maître.
- * @returns {boolean} True si supprimé, false si introuvable.
+ * @param {string} id - Matricule de l'etudiant a supprimer.
+ * @param {string} masterPassword - Mot de passe maitre.
+ * @returns {boolean} True si supprime, false si introuvable.
  */
 export function deleteStudent(id, masterPassword) {
   const students = loadStudents(masterPassword);
@@ -156,9 +156,9 @@ export function deleteStudent(id, masterPassword) {
 }
 
 /**
- * Récupère tous les étudiants enregistrés avec calcul de statistiques.
+ * Recupere tous les etudiants enregistres avec calcul de statistiques.
  * 
- * @param {string} masterPassword - Mot de passe maître.
+ * @param {string} masterPassword - Mot de passe maitre.
  * @returns {{ students: Array<Object>, stats: Object }}
  */
 export function listAllStudents(masterPassword) {
