@@ -84,6 +84,24 @@ secure-student-cli
 
 ---
 
+## 📸 Galerie Visuelle du Projet en Action | معرض الصور التجريبية للأداة
+
+<div align="center">
+  <h3>1. Menu Interactif Principal & Saisie Sécurisée | القائمة التفاعلية الرئيسية</h3>
+  <img src="./assets/screenshots/03_interactive_menu.png" alt="Menu Principal" width="780" style="border-radius: 8px; margin-bottom: 20px;" />
+
+  <h3>2. Consultation des Relevés et Statistiques de Promotion | عرض السجلات والإحصائيات</h3>
+  <img src="./assets/screenshots/04_list_and_stats.png" alt="Liste et Statistiques" width="780" style="border-radius: 8px; margin-bottom: 20px;" />
+
+  <h3>3. Relevé de Notes Officiel (Bulletin Académique) | كشف النقاط الرسمي</h3>
+  <img src="./assets/screenshots/05_official_transcript.png" alt="Bulletin Officiel" width="780" style="border-radius: 8px; margin-bottom: 20px;" />
+
+  <h3>4. Preuve du Chiffrement Physique (Zero Plain Text) | إثبات خلو القرص من النصوص الصريحة</h3>
+  <img src="./assets/screenshots/08_raw_encrypted_vault.png" alt="Fichier Chiffré sur Disque" width="780" style="border-radius: 8px; margin-bottom: 20px;" />
+</div>
+
+---
+
 ## 💻 Guide d'Utilisation | دليل الاستخدام
 
 ### 1. Mode Interactif Convivial (Recommandé) | الوضع التفاعلي المباشر

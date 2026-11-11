@@ -16,7 +16,7 @@
 ## 1. المقدمة والسياق الأكاديمي لمشروع مقياس PAWEB
 
 <div align="center">
-  <img src="./assets/sujet-2-paweb.jpg" alt="Énoncé Officiel Sujet 2 - PAWEB" width="600" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); margin: 15px 0;" />
+  <img src="./assets/sujet-2-paweb.jpg" alt="Énoncé Officiel Sujet 2 - PAWEB" width="620" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); margin: 15px 0;" />
   <p><em>FR : Figure 1 – Copie officielle de l'énoncé du Sujet n°2 remis aux étudiants le 28-10-2026.<br>AR : صورة 1 – النسخة الرسمية لنص الموضوع الثاني الموزع على طلبة السنة الثالثة LMD ISIL بتاريخ 28-10-2026.</em></p>
 </div>
 
@@ -48,7 +48,7 @@ Les exigences fondamentales sont :
 - **Format des modules :** ECMAScript Modules (ESM) natifs grâce à `"type": "module"` dans `package.json`.
 - **Principe de minimisation de la surface d'attaque (Zero npm Dependencies) :**  
   Pour éviter toute vulnérabilité liée aux paquets tiers (Supply Chain Vulnerabilities), le projet n'utilise **aucune dépendance externe**. Il s'appuie à 100% sur les modules intégrés au cœur de Node.js :
-  - `node:crypto` : Fonctions cryptographiques de haut niveau (scryptSync, AES-256-GCM, randomBytes).
+  - `node:crypto` : Fonctions cryptographiques certifiées (scryptSync, AES-256-GCM, randomBytes).
   - `node:fs` : Manipulation sécurisée des fichiers locaux.
   - `node:readline` : Lecture interactive et gestion des flux d'entrée du terminal.
   - `node:path` & `node:url` : Résolution robuste et portable des chemins de fichiers.
@@ -58,20 +58,12 @@ Les exigences fondamentales sont :
 - **بيئة التشغيل :** Node.js بإصداره طويل الدعم (LTS).
 - **نظام الوحدات :** الوحدات الحديثة (ES Modules) المعرفة عبر `"type": "module"` في ملف `package.json`.
 - **مبدأ تقليص مساحة الهجوم وانعدام الحزم الخارجية (Zero External Dependencies) :**  
-  تطبيقاً لمفاهيم الأمان السيبراني المدروسة في مقياس أمن النظم، تم تجنب تثبيت أي مكتبة خارجية عبر npm لتفادي هجمات سلاسل التوريد البرمجية (Supply Chain Attacks). تم الاكتفاء كلياً بمكتبات Node.js القياسية الموثوقة:
-  - `node:crypto` : لتنفيذ العمليات الرياضية التشفيرية المتقدمة وتوليد الأرقام العشوائية الأمنية.
-  - `node:fs` : للقراءة والكتابة الفيزيائية المشفرة على القرص.
-  - `node:readline` : لإدارة التفاعل وقراءة مدخلات المستخدم عبر الطرفية.
-  - `node:path` و `node:url` : للتعامل المحكم مع مسارات الملفات عبر مختلف أنظمة التشغيل.
-  - `node:assert` : لإجراء اختبارات الوحدة الصارمة والتحقق من صحة النتائج.
+  تطبيقاً لمفاهيم الأمان السيبراني المدروسة في مقياس أمن النظم، تم تجنب تثبيت أي مكتبة خارجية عبر npm لتفادي هجمات سلاسل التوريد البرمجية (Supply Chain Attacks). تم الاكتفاء كلياً بمكتبات Node.js القياسية الموثوقة.
 
 ---
 
 ## 3. Architecture Logicielle Modulaire
 ## 3. الهيكلية البرمجية وتوزيع المسؤوليات (Software Architecture)
-
-### Français :
-L'application a été conçue selon le principe de séparation des responsabilités (*Separation of Concerns*) :
 
 ```text
 paweb-secure-student-cli/
@@ -80,10 +72,12 @@ paweb-secure-student-cli/
 ├── .gitignore                    # Exclusion des fichiers temporaires et données sensibles
 ├── test.js                       # Suite complète de tests unitaires et cryptographiques
 ├── seed.js                       # Générateur de données de démonstration pour évaluation
+├── generate_screenshots.js       # Outil de génération des captures d'écran de validation
 ├── README.md                     # Manuel utilisateur bilingue (Français / Arabe)
 ├── PROCESSUS_DE_DEVELOPPEMENT.md # Journal de bord technique approfondi selon le cursus
 ├── assets/
-│   └── sujet-2-paweb.jpg         # Photo scannée de l'énoncé officiel du sujet
+│   ├── sujet-2-paweb.jpg         # Photo scannée de l'énoncé officiel du sujet
+│   └── screenshots/              # Captures d'écran réelles de chaque étape de l'outil
 └── src/
     ├── crypto.js                 # Cœur cryptographique (AES-256-GCM, scryptSync, IV, Salt)
     ├── storage.js                # Gestion du stockage chiffré sur disque (Zero Plain Text)
@@ -91,110 +85,95 @@ paweb-secure-student-cli/
     └── prompt.js                 # Saisie sécurisée et masquage du mot de passe en Raw Mode
 ```
 
-### العربية :
-تم بناء التطبيق وفق أفضل الممارسات الهندسية لفصل المهام (Separation of Concerns)، حيث تم تقسيم المشروع إلى وحدات وظيفية مستقلة:
-- `index.js`: الموجه الرئيسي للأوامر، يحتوي على القائمة التفاعلية ونظام توجيه المدخلات.
-- `src/crypto.js`: المحرك التشفيري، مسؤول عن اشتقاق المفاتيح وخوارزمية AES-GCM.
-- `src/storage.js`: وحدة التخزين المحلي، تضمن قراءة وكتابة الحاويات المشفرة فقط.
-- `src/studentService.js`: منطق الأعمال الأكاديمي (إضافة، بحث، حساب المعدلات، كشوف النقاط الرسمية، والحذف).
-- `src/prompt.js`: وحدة قراءة المدخلات بشكل آمن مع إخفاء كلمة المرور الرئيسية.
+---
+
+## 4. Implémentation Cryptographique & Preuve de Sécurité
+## 4. البناء الرياضي لنظام التشفير والدليل على انعدام النص الصريح
+
+### 4.1 Pourquoi AES-256-GCM et scrypt ? | لماذا AES-256-GCM و scrypt؟
+- **AES-256-GCM (Galois/Counter Mode) :** Mode de chiffrement symétrique authentifié (**AEAD**) garantissant la **confidentialité** et l'**intégrité** via une étiquette d'authentification (**Authentication Tag**) de 128 bits.
+- **scryptSync :** Fonction de dérivation de clé (**Memory-hard**) conçue pour neutraliser les attaques par force brute (Brute-force) et cartes GPU.
+- **Renouvellement IV & Sel :** Génération aléatoire d'un nouvel `IV` (12 octets / 96 bits) et d'un nouveau `Salt` (16 octets / 128 bits) à chaque écriture pour interdire la vulnérabilité de réutilisation d'IV (*Nonce Reuse Disaster*).
+
+### 4.2 Preuve Expérimentale du Chiffrement sur Disque (Zero Plain Text)
+<div align="center">
+  <img src="./assets/screenshots/08_raw_encrypted_vault.png" alt="Preuve du chiffrement physique sur disque" width="850" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.25); margin: 15px 0;" />
+  <p><em>FR : Figure 2 – Inspection directe du fichier physique : Aucun nom, matricule ou note n'apparaît en clair.<br>AR : صورة 2 – المعاينة المباشرة للملف الفيزيائي على القرص الصلب تثبت غياب أي بيانات نصية صريحة.</em></p>
+</div>
 
 ---
 
-## 4. Implémentation Cryptographique Détaillée (AES-256-GCM & scrypt)
-## 4. البناء الرياضي لنظام التشفير (AES-256-GCM واشتقاق المفاتيح)
+## 5. Interface Utilisateur & Interaction Sécurisée
+## 5. واجهة الاستخدام والأوامر التفاعلية المنفذة
 
-### 4.1 Pourquoi le mode AES-256-GCM ? | لماذا وضع GCM؟
-#### Français :
-Le mode GCM (*Galois/Counter Mode*) est un standard de chiffrement symétrique authentifié (**AEAD**). Il combine le mode CTR pour la rapidité et la confidentialité, avec la multiplication de Galois (GMAC) pour produire une étiquette d'authentification (**Authentication Tag**) de 128 bits. Si un attaquant modifie ne serait-ce qu'un seul octet dans le fichier chiffré, le déchiffrement est immédiatement bloqué.
-
-#### العربية :
-يعد وضع **GCM** المعيار الذهبي في التشفير المتناظر الموثق (**AEAD - Authenticated Encryption with Associated Data**). فهو يدمج بين السرعة الفائقة لنمط العداد (CTR) والتحقق الرياضي الدقيق عبر حقول غالوا (Galois GMAC) لينتج وسم تحقق أصالة (**Authentication Tag**) بطول 128 بت. يضمن هذا النمط الحماية المتزامنة للسرية والسلامة، ويكتشف فوراً أي محاولة تعديل أو تخريب للملف المشفر.
-
----
-
-### 4.2 Dérivation de Clé avec `crypto.scryptSync` | اشتقاق المفاتيح بواسطة scrypt
-#### Français :
-Une clé AES-256 nécessite exactement 32 octets pseudo-aléatoires à haute entropie. Un mot de passe humain en est dépourvu. Pour pallier cela, nous utilisons `scrypt`, une fonction KDF conçue pour être coûteuse en mémoire vive (**Memory-hard**), rendant les attaques par GPU ou circuits spécialisés (ASIC) inopérantes :
-
-```javascript
-export function deriveKey(password, salt) {
-  return crypto.scryptSync(password, salt, 32, {
-    N: 16384, // Coût mémoire/CPU (Iterations)
-    r: 8,     // Taille des blocs
-    p: 1      // Parallélisme
-  });
-}
-```
-
-#### العربية :
-تتطلب خوارزمية AES-256 مفتاحاً ثنائياً عالي العشوائية بطول 32 بايت (256 بت)، وهو ما لا تحققه كلمات المرور النصية العادية. لذا تم استخدام دالة **scrypt** المصنفة كدالة اشتقاق مفاتيح مكلفة من حيث استهلاك الذاكرة والمعالجة (**Memory-hard**)، مما يحبط هجمات القوة الغاشمة (Brute-force) وهجمات القواميس المنفذة عبر كروت الشاشة الحديثة أو أجهزة التعدين المخصصة.
+### 5.1 Menu Interactif Principal (secure-student-cli)
+<div align="center">
+  <img src="./assets/screenshots/03_interactive_menu.png" alt="Menu Interactif Principal" width="850" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.25); margin: 15px 0;" />
+  <p><em>FR : Figure 3 – Menu principal interactif offrant un accès intuitif à l'ensemble des fonctionnalités.<br>AR : صورة 3 – القائمة الرئيسية التفاعلية للأداة مع إبراز معلومات الطلبة والخيارات المتاحة.</em></p>
+</div>
 
 ---
 
-### 4.3 Gestion Unique du Vecteur d'Initialisation (IV) & Sel (Salt) | إدارة متجه التهيئة والملح
-#### Français :
-La réutilisation d'un même IV avec la même clé dans le mode GCM détruit la sécurité cryptographique (*Nonce Reuse Disaster*). Pour respecter strictement le sujet :
-1. Un nouveau **Salt** aléatoire de 16 octets est tiré à chaque écriture.
-2. Un nouveau vecteur **IV** aléatoire de 12 octets (96 bits, standard NIST SP 800-38D) est tiré à chaque écriture via `crypto.randomBytes(12)`.
-3. Le conteneur enregistré sur disque contient : `{ algorithm, salt, iv, authTag, ciphertext, createdAt }`.
-
-#### العربية :
-إن إعادة استخدام نفس متجه التهيئة (IV) مع نفس المفتاح في نمط GCM يؤدي إلى انهيار منظومة الأمان الرياضية بالكامل. لتفادي هذا الخطر:
-1. يتم توليد ملح تشفيري (**Salt**) جديد عشوائي بطول 16 بايت في كل عملية حفظ.
-2. يتم توليد متجه تهيئة (**IV**) جديد وعشوائي بطول 12 بايت (96 بت وفق توصية NIST الدولية) باستخدام المولد الآمن `crypto.randomBytes(12)`.
-3. يتم تجميع الحاوية المشفرة على شكل كائن JSON خالٍ تماماً من أي نص صريح.
+### 5.2 Consultation Globale des Relevés & Statistiques de Promotion
+<div align="center">
+  <img src="./assets/screenshots/04_list_and_stats.png" alt="Consultation et Statistiques" width="850" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.25); margin: 15px 0;" />
+  <p><em>FR : Figure 4 – Affichage formaté des dossiers étudiants, mentions et calcul automatique des statistiques de promotion.<br>AR : صورة 4 – عرض سجلات الطلبة مع التقديرات والحساب الآلي لمعدل الدفعة وأعلى وأدنى علامة.</em></p>
+</div>
 
 ---
 
-## 5. Interaction Terminal Sécurisée (Mode Brut / Raw Mode)
-## 5. إدارة واجهة سطر الأوامر والإدخال السري لكلمة المرور
-
-### Français :
-Par défaut, le terminal affiche les caractères saisis. Pour protéger le mot de passe maître des regards indiscrets (*Shoulder Surfing*), le module `src/prompt.js` active le mode brut de Node.js (`process.stdin.setRawMode(true)`) :
-- Les caractères ne sont pas affichés en clair mais remplacés en temps réel par des astérisques `*`.
-- La touche retour arrière (`Backspace`) est gérée pour effacer proprement le caractère en mémoire et sur la console (`\b \b`).
-- La combinaison `Ctrl+C` est interceptée pour quitter proprement sans laisser de traces.
-
-### العربية :
-في الأحوال العادية، تقوم الطرفية بطباعة الحروف المدخلة مباشرة على الشاشة. لحماية كلمة المرور الرئيسية من التلصص البصري المباشر (Shoulder Surfing):
-- تم تفعيل الوضع الخام للطرفية (`Raw Mode`) لالتقاط كل ضغطة زر فرادى.
-- استبدال الحروف بنجوم مسايرة لحجم الكلمة (`*`) دون إظهار النص الحقيقي.
-- دعم كامل لزر المسح (`Backspace`) لتعديل الكلمة، والتعامل السليم مع اختصار المقاطعة (`Ctrl+C`).
+### 5.3 Génération d'un Relevé de Notes Officiel (Bulletin Académique)
+<div align="center">
+  <img src="./assets/screenshots/05_official_transcript.png" alt="Bulletin Officiel de Notes" width="850" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.25); margin: 15px 0;" />
+  <p><em>FR : Figure 5 – Relevé de notes officiel complet avec décision du jury et signature cryptographique.<br>AR : صورة 5 – كشف نقاط أكاديمي رسمي متكامل مع قرار اللجنة والبصمة التشفيرية.</em></p>
+</div>
 
 ---
 
-## 6. Méthodologie de Test & Validation de Sécurité
+### 5.4 Recherche Instantanée d'Étudiant
+<div align="center">
+  <img src="./assets/screenshots/06_search_student.png" alt="Recherche Instantanée" width="850" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.25); margin: 15px 0;" />
+  <p><em>FR : Figure 6 – Recherche instantanée insensible à la casse par matricule, nom ou prénom.<br>AR : صورة 6 – محرك البحث الفوري عن الطلبة بالاسم أو برقم التسجيل.</em></p>
+</div>
+
+---
+
+### 5.5 Audit et Statut de Sécurité du Coffre-Fort
+<div align="center">
+  <img src="./assets/screenshots/07_security_status.png" alt="Audit et Paramètres Cryptographiques" width="850" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.25); margin: 15px 0;" />
+  <p><em>FR : Figure 7 – Rapport d'audit de sécurité confirmant l'état actif d'AES-256-GCM et le fonctionnement 100% hors-ligne.<br>AR : صورة 7 – تقرير التدقيق الأمني الذي يؤكد فاعلية التشفير وانعدام أي استهلاك للشبكة.</em></p>
+</div>
+
+---
+
+## 6. Méthodologie de Tests & Validation de Sécurité
 ## 6. منهجية الاختبار والتحقق الأمني الشامل
 
-### Français :
-Le fichier [`test.js`](file:///c:/Users/PCSTAR/Documents/paweb-secure-student-cli/test.js) exécute une batterie complète de 7 tests automatisés validant :
-1. **Conformité de la dérivation de clé :** Clé scrypt de 256 bits conforme.
-2. **Cycle de chiffrement/déchiffrement :** Restitution parfaite des données sans altération.
-3. **Unicité stricte de l'IV :** Deux chiffrements consécutifs produisent des IV et des ciphertexts différents.
-4. **Rejet de mot de passe erroné :** Échec immédiat avec levée de `ERR_CRYPTO_AUTH_FAILED`.
-5. **Détection d'altération (Tampering) :** La modification d'un seul octet dans le fichier chiffré bloque le déchiffrement via l'Auth Tag.
-6. **Zéro texte en clair :** Inspection directe du fichier physique vérifiant l'absence absolue de noms, notes ou matricules en clair.
-7. **Fonctions métier :** Ajout, recherche multi-critères, consultation et suppression d'étudiants.
+<div align="center">
+  <img src="./assets/screenshots/01_tests_execution.png" alt="Exécution des Tests Automatisés" width="850" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.25); margin: 15px 0;" />
+  <p><em>FR : Figure 8 – Validation avec succès des 7 tests cryptographiques et fonctionnels (npm test).<br>AR : صورة 8 – النجاح التام لكافة الاختبارات الأمنية والوظيفية السبعة عبر أمر npm test.</em></p>
+</div>
 
-### العربية :
-يتضمن ملف الاختبارات المدمج [`test.js`](file:///c:/Users/PCSTAR/Documents/paweb-secure-student-cli/test.js) سبعة اختبارات آلية صارمة يمكن تشغيلها عبر `npm test`:
-1. التحقق من صحة طول المفتاح المشتق (256 بت).
-2. التحقق من سلامة دورة التشفير وفك التشفير التناظري.
-3. التأكد من فرادة متجه التهيئة (IV) عند كل عملية متتالية.
-4. التأكد من الرفض الفوري لأي كلمة مرور غير صحيحة.
-5. اختبار كشف التلاعب (Tampering): تعديل بايت واحد في النص المشفر يؤدي مباشرة لفشل التحقق وحجب البيانات.
-6. التأكد الفيزيائي من خلو ملف التخزين على القرص من أي نص صريح للطلاب أو النقاط.
-7. التحقق من كافة الدوال الوظيفية: الإضافة، البحث، استخراج كشف النقاط، والحذف.
+### Scénarios validés automatiquement :
+1. **Test 1 - Dérivation scrypt :** Clé de 32 octets (256 bits) conforme aux spécifications.
+2. **Test 2 - Aller-retour AES-256-GCM :** Restitution parfaite des données chiffrées sans corruption.
+3. **Test 3 - Unicité de l'IV & Salt :** Deux chiffrements successifs du même texte produisent obligatoirement des IV et ciphertexts différents.
+4. **Test 4 - Rejet de mauvais mot de passe :** Levée immédiate de l'erreur `ERR_CRYPTO_AUTH_FAILED` via l'Authentication Tag.
+5. **Test 5 - Détection d'altération (Anti-Tampering) :** La modification d'un seul octet dans le fichier chiffré bloque le déchiffrement.
+6. **Test 6 - Zero Plain Text :** Absence absolue de texte en clair dans le fichier de stockage sur disque.
+7. **Test 7 - Fonctions métier :** Ajout, recherche, consultation et suppression d'étudiants.
 
 ---
 
-## 7. Guide d'Évaluation & Démonstration Académique
-## 7. دليل التقييم الأكاديمي والعرض التوضيحي للجنة المناقشة
+## 7. Guide d'Évaluation Rapide pour l'Enseignant
+## 7. دليل التقييم السريع الموجه للأستاذ المشرف
 
-### Français :
-Pour une soutenance ou une évaluation rapide par l'enseignant du module PAWEB :
+<div align="center">
+  <img src="./assets/screenshots/02_seed_initialization.png" alt="Génération de Données de Test" width="850" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.25); margin: 15px 0;" />
+  <p><em>FR : Figure 9 – Initialisation instantanée de 5 dossiers d'étudiants chiffrés pour faciliter la soutenance.<br>AR : صورة 9 – التوليد الفوري لخمسة ملفات طلاب مشفرة لتسهيل العرض والمناقشة.</em></p>
+</div>
 
+### Commandes à exécuter lors de la soutenance :
 ```bash
 # 1. Cloner et configurer l'outil / استنساخ وتهيئة الأداة
 git clone https://github.com/salhisalhi2024/paweb-secure-student-cli.git
@@ -207,19 +186,12 @@ npm test
 # 3. Générer instantanément des données de test réalistes / توليد بيانات تجريبية فورية
 npm run seed
 
-# 4. Lancer le menu interactif ou les commandes directes / تشغيل الأداة
+# 4. Lancer les commandes de consultation / استعراض البيانات
 secure-student-cli list
 secure-student-cli transcript "2024001"
 secure-student-cli search "SALHI"
 secure-student-cli status
 ```
-
-### العربية :
-لتسهيل تقييم المشروع من قبل الأستاذ المشرف أثناء المداولات أو المناقشة الحضورية:
-1. استنساخ المشروع وربطه بالأمر العام عبر `npm link`.
-2. تشغيل الاختبارات للتأكد من نجاح كافة الشروط الأمنية عبر `npm test`.
-3. استخدام أمر `npm run seed` لتوليد 5 طلاب تجريبيين بدرجات مختلفة لتسهيل المعاينة الفورية.
-4. استعراض كشف النقاط الرسمي عبر `secure-student-cli transcript "2024001"`.
 
 ---
 
@@ -230,7 +202,7 @@ secure-student-cli status
 Ce projet concrétise l'ensemble des notions théoriques et pratiques dispensées dans le cursus **L3 ISIL** :
 - Maîtrise avancée du runtime **Node.js** et de l'architecture sans dépendances.
 - Application rigoureuse des standards cryptographiques modernes (**AES-256-GCM**, **scrypt**).
-- Ergonomie soignée répondant aux exigences des logiciels en ligne de commande de qualité industrielle.
+- Ergonomie soignée répondant aux exigences des logiciels en ligne de commande de qualité professionnelle.
 
 ### العربية :
 يجسد هذا المشروع المخرجات التعليمية المستهدفة في منهاج **السنة الثالثة ليسانس ISIL**:
