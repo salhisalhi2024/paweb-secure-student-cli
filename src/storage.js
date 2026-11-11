@@ -1,7 +1,9 @@
 /**
  * ============================================================================
- * MODULE DE STOCKAGE LOCAL CHIFFRÉ (ENCRYPTED LOCAL STORAGE MODULE)
- * Auteurs : Salhi Issam & Chouikha Imane (L3 ISIL - Module PAWEB)
+ * MODULE DE STOCKAGE LOCAL CHIFFRÉ / وحدة التخزين المحلي المشفر
+ * ============================================================================
+ * Auteurs / المؤلفون : Salhi Issam & Chouikha Imane (L3 ISIL - Module PAWEB)
+ * Objectif / الهدف : Zéro texte en clair sur le disque dur (Zero Plain Text Storage)
  * ============================================================================
  */
 
@@ -10,14 +12,14 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { encryptData, decryptData } from './crypto.js';
 
-// Résolution du chemin absolu du fichier de base de données chiffrée
+// Résolution déterministe des chemins absolus / تحديد المسارات الفيزيائية للملفات
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const DATA_DIR = path.resolve(__dirname, '../data');
 const VAULT_FILE = path.join(DATA_DIR, 'students_vault.enc.json');
 
 /**
- * Assure l'existence du répertoire de données local.
+ * Assure l'existence du dossier de données local / ضمان وجود مجلد التخزين
  */
 function ensureDataDirectory() {
   if (!fs.existsSync(DATA_DIR)) {
@@ -26,7 +28,7 @@ function ensureDataDirectory() {
 }
 
 /**
- * Vérifie si le fichier de données chiffrées existe sur le disque.
+ * Vérifie si le fichier de coffre-fort existe sur le disque / التحقق من وجود ملف الخزنة
  * @returns {boolean}
  */
 export function vaultExists() {
@@ -34,21 +36,21 @@ export function vaultExists() {
 }
 
 /**
- * Charge et déchiffre la liste des étudiants en mémoire.
+ * Charge et déchiffre les dossiers étudiants en mémoire vive (RAM).
  * 
- * ملاحظة بالعربية (Note en Arabe) :
- * لا يتم تخزين أي سجل بصيغة نصية واضحة على القرص الصلب نهائياً.
- * يتم قراءة الملف المشفر وفك تشفيره حصراً في ذاكرة الرام (RAM) أثناء تشغيل البرنامج،
- * ثم يتلاشى فور انتهاء العملية.
+ * [FR] Aucune donnée sensible n'est persistée en clair sur le disque physique.
+ *      Les enregistrements ne résident en mémoire que durant l'exécution.
+ * [AR] قراءة واسترجاع سجلات الطلاب المشفرة مباشرة إلى الذاكرة الحية (RAM).
+ *      لا يتم حفظ أي اسم أو علامة أو رقم تعريف بنص واضح على القرص الصلب مطلقاً.
  * 
- * @param {string} masterPassword - Mot de passe maître.
- * @returns {Array<Object>} Liste des étudiants déchiffrée.
+ * @param {string} masterPassword - Mot de passe maître / كلمة المرور الرئيسية
+ * @returns {Array<Object>} Liste des étudiants déchiffrée / قائمة السجلات المسترجعة
  */
 export function loadStudents(masterPassword) {
   ensureDataDirectory();
 
   if (!fs.existsSync(VAULT_FILE)) {
-    // Si le fichier n'existe pas encore, renvoie une liste vide
+    // Si la base n'existe pas encore, renvoie une liste vide / إرجاع قائمة فارغة إذا كان التشغيل لأول مرة
     return [];
   }
 
@@ -59,28 +61,25 @@ export function loadStudents(masterPassword) {
     const decryptedText = decryptData(encryptedPayload, masterPassword);
     const students = JSON.parse(decryptedText);
 
-    if (!Array.isArray(students)) {
-      return [];
-    }
-
-    return students;
+    return Array.isArray(students) ? students : [];
   } catch (error) {
     if (error.code === 'ERR_CRYPTO_AUTH_FAILED') {
       throw error;
     }
-    throw new Error(`Erreur lors de la lecture du fichier chiffré : ${error.message}`);
+    throw new Error(`Erreur lors de la lecture du fichier chiffré / خطأ أثناء قراءة الملف المشفر : ${error.message}`);
   }
 }
 
 /**
- * Chiffre et enregistre la liste complète des étudiants sur le disque local.
+ * Chiffre et enregistre la collection complète des étudiants sur le disque.
  * 
- * ملاحظة بالعربية (Note en Arabe) :
- * يتم إنشاء ملف آمن مشفر بتقنية AES-256-GCM. في كل عملية حفظ،
- * يتم توليد Salt و IV جديدين بالكامل لحماية السجلات من أي هجمات تكرارية.
+ * [FR] À chaque écriture, un conteneur JSON cryptographique neuf est produit avec
+ *      un Salt et un IV indépendants.
+ * [AR] تشفير وحفظ السجلات على القرص الصلب بصيغة مشفرة غير قابلة للقراءة دون المفتاح.
+ *      يتم توليد Salt و IV جديدين تماماً في كل عملية حفظ لمنع استنتاج أي أنماط.
  * 
- * @param {Array<Object>} students - Liste des enregistrements étudiants.
- * @param {string} masterPassword - Mot de passe maître pour le chiffrement.
+ * @param {Array<Object>} students - Liste des enregistrements / قائمة الطلاب
+ * @param {string} masterPassword - Mot de passe maître / كلمة المرور الرئيسية
  */
 export function saveStudents(students, masterPassword) {
   ensureDataDirectory();
@@ -88,15 +87,14 @@ export function saveStudents(students, masterPassword) {
   const plainJson = JSON.stringify(students, null, 2);
   const encryptedPayload = encryptData(plainJson, masterPassword);
 
-  // Écriture du conteneur cryptographique JSON sur le disque (AUCUN texte en clair)
+  // Écriture du conteneur cryptographique (aucun texte en clair) / كتابة الحاوية المشفرة
   fs.writeFileSync(VAULT_FILE, JSON.stringify(encryptedPayload, null, 2), 'utf8');
 }
 
 /**
- * Renvoie le chemin d'accès au fichier de coffre-fort chiffré.
+ * Renvoie le chemin physique du coffre chiffré / مسار ملف الخزنة
  * @returns {string}
  */
 export function getVaultPath() {
   return VAULT_FILE;
 }
-

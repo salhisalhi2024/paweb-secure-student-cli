@@ -8,7 +8,20 @@
 import { loadStudents, saveStudents, vaultExists } from './storage.js';
 
 /**
- * Affiche un tableau stylisé ou une fiche pour un étudiant.
+ * Calcule l'appréciation / mention selon la note.
+ * @param {number} grade 
+ * @returns {string}
+ */
+export function getMention(grade) {
+  if (grade >= 16) return 'Très Bien';
+  if (grade >= 14) return 'Bien';
+  if (grade >= 12) return 'Assez Bien';
+  if (grade >= 10) return 'Passable';
+  return 'Ajourné';
+}
+
+/**
+ * Affiche un tableau stylisé pour un étudiant.
  * @param {Object} student 
  */
 export function formatStudent(student) {
@@ -25,16 +38,36 @@ export function formatStudent(student) {
 }
 
 /**
- * Calcule l'appréciation / mention selon la note.
- * @param {number} grade 
+ * Génère un relevé de notes officiel formaté façon bulletin académique.
+ * @param {Object} student 
  * @returns {string}
  */
-function getMention(grade) {
-  if (grade >= 16) return 'Très Bien';
-  if (grade >= 14) return 'Bien';
-  if (grade >= 12) return 'Assez Bien';
-  if (grade >= 10) return 'Passable';
-  return 'Ajourné';
+export function formatTranscript(student) {
+  const mention = getMention(student.grade);
+  const status = student.grade >= 10 ? 'VALIDÉ (ADMIS)' : 'NON VALIDÉ (AJOURNÉ)';
+  
+  return `
+  ╔══════════════════════════════════════════════════════════════╗
+  ║           RÉPUBLIQUE ALGÉRIENNE DÉMOCRATIQUE ET POPULAIRE    ║
+  ║           MINISTÈRE DE L'ENSEIGNEMENT SUPÉRIEUR ET DE LA R.S ║
+  ║                 RELEVÉ DE NOTES OFFICIEL - 2025/2026         ║
+  ╠══════════════════════════════════════════════════════════════╣
+  ║ INFORMATIONS DE L'ÉTUDIANT :                                 ║
+  ║   • Matricule / ID : ${String(student.id).padEnd(38)}║
+  ║   • Nom de Famille : ${String(student.nom).padEnd(38)}║
+  ║   • Prénom         : ${String(student.prenom).padEnd(38)}║
+  ║   • Filière / Cycle: ${String(student.filiere || 'L3 ISIL').padEnd(38)}║
+  ╠══════════════════════════════════════════════════════════════╣
+  ║ RÉSULTATS PÉDAGOGIQUES :                                     ║
+  ║   • Module d'Enseignement : ${String(student.module || 'PAWEB').padEnd(31)}║
+  ║   • Note Finale / Moyenne : ${(student.grade.toFixed(2) + ' / 20.00').padEnd(31)}║
+  ║   • Mention Attribuée     : ${mention.padEnd(31)}║
+  ║   • Décision du Jury      : ${status.padEnd(31)}║
+  ╠══════════════════════════════════════════════════════════════╣
+  ║ SÉCURITÉ CRYPTOGRAPHIQUE :                                   ║
+  ║   • Signature Coffre-Fort : AES-256-GCM Authentifié (128-bit)║
+  ║   • Date d'Horodatage     : ${String(student.createdAt).padEnd(31)}║
+  ╚══════════════════════════════════════════════════════════════╝`;
 }
 
 /**
@@ -91,6 +124,38 @@ export function searchStudents(query, masterPassword) {
 }
 
 /**
+ * Récupère un étudiant par son matricule exact.
+ * 
+ * @param {string} id - Matricule de l'étudiant.
+ * @param {string} masterPassword - Mot de passe maître.
+ * @returns {Object|null}
+ */
+export function getStudentById(id, masterPassword) {
+  const students = loadStudents(masterPassword);
+  return students.find((s) => s.id.toLowerCase() === id.trim().toLowerCase()) || null;
+}
+
+/**
+ * Supprime un étudiant par son matricule et ré-encrypte le coffre.
+ * 
+ * @param {string} id - Matricule de l'étudiant à supprimer.
+ * @param {string} masterPassword - Mot de passe maître.
+ * @returns {boolean} True si supprimé, false si introuvable.
+ */
+export function deleteStudent(id, masterPassword) {
+  const students = loadStudents(masterPassword);
+  const initialLength = students.length;
+  const filtered = students.filter((s) => s.id.toLowerCase() !== id.trim().toLowerCase());
+
+  if (filtered.length === initialLength) {
+    return false;
+  }
+
+  saveStudents(filtered, masterPassword);
+  return true;
+}
+
+/**
  * Récupère tous les étudiants enregistrés avec calcul de statistiques.
  * 
  * @param {string} masterPassword - Mot de passe maître.
@@ -118,4 +183,3 @@ export function listAllStudents(masterPassword) {
 
   return { students, stats };
 }
-

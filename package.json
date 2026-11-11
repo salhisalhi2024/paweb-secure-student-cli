@@ -1,7 +1,7 @@
 {
   "name": "paweb-secure-student-cli",
   "version": "1.0.0",
-  "description": "CLI sécurisé pour le stockage, le chiffrement et la consultation des relevés d'étudiants (AES-256-GCM)",
+  "description": "CLI sécurisé pour le stockage, le chiffrement et la consultation des relevés d'étudiants (AES-256-GCM) - L3 ISIL PAWEB",
   "main": "index.js",
   "type": "module",
   "bin": {
@@ -9,7 +9,8 @@
   },
   "scripts": {
     "start": "node index.js",
-    "test": "node test.js"
+    "test": "node test.js",
+    "seed": "node seed.js"
   },
   "keywords": [
     "cli",
@@ -18,9 +19,10 @@
     "encryption",
     "academic",
     "paweb",
-    "offline"
+    "offline",
+    "algerian-university",
+    "l3-isil"
   ],
   "author": "Salhi Issam & Chouikha Imane (3ème année L3 ISIL - PAWEB)",
   "license": "MIT"
 }
-

@@ -12,7 +12,15 @@
  */
 
 import { vaultExists, getVaultPath } from './src/storage.js';
-import { addStudent, searchStudents, listAllStudents, formatStudent } from './src/studentService.js';
+import {
+  addStudent,
+  searchStudents,
+  listAllStudents,
+  getStudentById,
+  deleteStudent,
+  formatStudent,
+  formatTranscript
+} from './src/studentService.js';
 import { askQuestion, askPassword } from './src/prompt.js';
 
 // En-tête d'accueil stylisé
@@ -156,6 +164,55 @@ async function handleList(password) {
 }
 
 /**
+ * Action : Afficher un relevé de notes officiel (Bulletin)
+ */
+async function handleTranscript(password, initialId = null) {
+  const id = initialId || (await askQuestion('\n🎓 Entrez le matricule de l\'étudiant pour le relevé : '));
+  if (!id) {
+    console.log('❌ Le matricule est obligatoire.');
+    return;
+  }
+
+  const student = getStudentById(id, password);
+  if (!student) {
+    console.log(`❌ Aucun étudiant trouvé avec le matricule "${id}".`);
+    return;
+  }
+
+  console.log(formatTranscript(student));
+}
+
+/**
+ * Action : Supprimer un étudiant
+ */
+async function handleDelete(password, initialId = null) {
+  const id = initialId || (await askQuestion('\n🗑️ Entrez le matricule de l\'étudiant à supprimer : '));
+  if (!id) {
+    console.log('❌ Le matricule est obligatoire.');
+    return;
+  }
+
+  const student = getStudentById(id, password);
+  if (!student) {
+    console.log(`❌ Aucun étudiant trouvé avec le matricule "${id}".`);
+    return;
+  }
+
+  const confirm = await askQuestion(`⚠️ Êtes-vous sûr de vouloir supprimer définitivement ${student.nom} ${student.prenom} (${id}) ? (o/n) : `);
+  if (confirm.toLowerCase() !== 'o' && confirm.toLowerCase() !== 'oui' && confirm.toLowerCase() !== 'y') {
+    console.log('Opération annulée.');
+    return;
+  }
+
+  const success = deleteStudent(id, password);
+  if (success) {
+    console.log(`\n✅ L'étudiant "${id}" a été supprimé avec succès. Le coffre a été ré-encrypté avec un nouvel IV.`);
+  } else {
+    console.log('❌ Échec de la suppression.');
+  }
+}
+
+/**
  * Action : Afficher les détails de sécurité et statut du coffre
  */
 function handleStatus() {
@@ -167,7 +224,7 @@ function handleStatus() {
 • Algorithme             : AES-256-GCM (Authenticated Encryption)
 • Dérivation de Clé      : scryptSync (Memory-hard KDF, N=16384, r=8, p=1)
 • Vecteur d'init. (IV)   : 96 bits (12 octets) aléatoire généré à chaque écriture
-• Protection Integrité   : Authentication Tag 128 bits
+• Protection Intégrité   : Authentication Tag 128 bits
 • Connexion Réseau       : 0 API Web (100% Fonctionnement Hors-ligne local)
 `);
 }
@@ -184,11 +241,13 @@ async function interactiveMenu() {
   [1] ➕ Ajouter un nouvel étudiant
   [2] 🔍 Rechercher un étudiant
   [3] 📋 Lister tous les étudiants & relevés
-  [4] 🛡️  Statut du coffre et sécurité
-  [5] 🚪 Quitter l'application
+  [4] 🎓 Relevé de notes officiel (Bulletin)
+  [5] 🗑️  Supprimer un étudiant
+  [6] 🛡️  Statut du coffre et sécurité
+  [7] 🚪 Quitter l'application
 ================================================`);
 
-    const choice = await askQuestion('Sélectionnez une option [1-5] : ');
+    const choice = await askQuestion('Sélectionnez une option [1-7] : ');
 
     try {
       switch (choice) {
@@ -208,16 +267,26 @@ async function interactiveMenu() {
           break;
         }
         case '4': {
-          handleStatus();
+          const pwd = await getMasterPassword();
+          await handleTranscript(pwd);
           break;
         }
         case '5': {
+          const pwd = await getMasterPassword();
+          await handleDelete(pwd);
+          break;
+        }
+        case '6': {
+          handleStatus();
+          break;
+        }
+        case '7': {
           console.log('\n🔒 Fermeture sécurisée de l\'application. À bientôt !');
           running = false;
           break;
         }
         default:
-          console.log('⚠️ Option invalide. Veuillez saisir un chiffre entre 1 et 5.');
+          console.log('⚠️ Option invalide. Veuillez saisir un chiffre entre 1 et 7.');
           break;
       }
     } catch (err) {
@@ -238,18 +307,22 @@ async function interactiveMenu() {
 function displayHelp() {
   console.log(`
 UTILISATION :
-  secure-student-cli                 Lance l'interface interactive complète
-  secure-student-cli add             Ajoute un étudiant directement
-  secure-student-cli list            Affiche tous les relevés de notes
-  secure-student-cli search <query>  Recherche un étudiant par identifiant ou nom
-  secure-student-cli status          Affiche les paramètres de sécurité cryptographiques
-  secure-student-cli --help, -h      Affiche cette documentation d'aide
+  secure-student-cli                     Lance l'interface interactive complète
+  secure-student-cli add                 Ajoute un étudiant directement
+  secure-student-cli list                Affiche tous les relevés de notes
+  secure-student-cli search <query>      Recherche un étudiant par identifiant ou nom
+  secure-student-cli transcript <id>     Affiche le bulletin officiel d'un étudiant
+  secure-student-cli delete <id>         Supprime un étudiant du coffre
+  secure-student-cli status              Affiche les paramètres de sécurité cryptographiques
+  secure-student-cli --help, -h          Affiche cette documentation d'aide
 
 EXEMPLES :
   secure-student-cli
   secure-student-cli add
   secure-student-cli list
   secure-student-cli search "BENALI"
+  secure-student-cli transcript "2024001"
+  secure-student-cli delete "2024001"
   secure-student-cli status
 `);
 }
@@ -286,6 +359,18 @@ async function main() {
         await handleSearch(pwd, query);
         break;
       }
+      case 'transcript': {
+        const id = args[1];
+        const pwd = await getMasterPassword();
+        await handleTranscript(pwd, id);
+        break;
+      }
+      case 'delete': {
+        const id = args[1];
+        const pwd = await getMasterPassword();
+        await handleDelete(pwd, id);
+        break;
+      }
       case 'status': {
         handleStatus();
         break;
@@ -316,4 +401,3 @@ async function main() {
 }
 
 main();
-
