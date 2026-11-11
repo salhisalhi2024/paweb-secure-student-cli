@@ -165,7 +165,7 @@ Definissez ou entrez le mot de passe maitre pour initialiser le coffre : <span c
 
 Chiffrement et insertion des enregistrements d'etudiants...
   <span class="success">[OK] Etudiant chiffre et insere : 2024001 - SALHI Issam (18.5/20)</span>
-  <span class="success">[OK] Etudiant chiffre et insere : 2024002 - CHOUIKHA Imane (18.0/20)</span>
+  <span class="success">[OK] Etudiant chiffre et insere : 2024002 - CHOUIK Imane (18.0/20)</span>
   <span class="success">[OK] Etudiant chiffre et insere : 2024003 - BENALI Youcef (15.75/20)</span>
   <span class="success">[OK] Etudiant chiffre et insere : 2024004 - MEZIANI Amine (13.5/20)</span>
   <span class="success">[OK] Etudiant chiffre et insere : 2024005 - KACI Nadia (11.0/20)</span>
@@ -182,7 +182,7 @@ Vous pouvez maintenant lancer : <span class="cyan">secure-student-cli list</span
    SECURE STUDENT CLI - SYSTEME DE GESTION SECURISE D'ETUDIANTS
    Chiffrement Militaire AES-256-GCM | 100% Hors-ligne | Zero Plain Text
    -----------------------------------------------------------------------------
-   Auteurs : Salhi Issam & Chouikha Imane
+   Auteurs : Salhi Issam & Chouik Imane
    Promotion : L3 ISIL - Module PAWEB
 ================================================================================</span>
 
@@ -215,7 +215,7 @@ Selectionnez une option [1-7] : <span class="cmd">_</span>`
   +----------------------------------------------------------+
   +----------------------------------------------------------+
   | MATRICULE / ID : <span class="bold">2024002</span>                                 |
-  | NOM & PRENOM   : <span class="bold">CHOUIKHA Imane</span>                          |
+  | NOM & PRENOM   : <span class="bold">CHOUIK Imane</span>                            |
   | FILIERE        : L3 ISIL                                 |
   | MODULE         : PAWEB                                   |
   | NOTE / MOYENNE : <span class="success">18.00 / 20 (Tres Bien)</span>                  |

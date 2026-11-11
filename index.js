@@ -5,7 +5,7 @@
  * SECURE STUDENT CLI - INTERFACE EN LIGNE DE COMMANDE (CLI)
  * ============================================================================
  * Sujet 2 : Gestionnaire securise de dossiers et releves de notes d'etudiants
- * Auteurs : Salhi Issam & Chouikha Imane
+ * Auteurs : Salhi Issam & Chouik Imane
  * Niveau   : 3eme annee L3 ISIL - Module PAWEB
  * Chiffrement : AES-256-GCM strictly | Derivation de cle : scryptSync
  * ============================================================================
@@ -30,7 +30,7 @@ function displayBanner() {
    SECURE STUDENT CLI - SYSTEME DE GESTION SECURISE D'ETUDIANTS
    Chiffrement Militaire AES-256-GCM | 100% Hors-ligne | Zero Plain Text
    -----------------------------------------------------------------------------
-   Auteurs : Salhi Issam & Chouikha Imane
+   Auteurs : Salhi Issam & Chouik Imane
    Promotion : L3 ISIL - Module PAWEB
 ================================================================================`);
 }
@@ -303,23 +303,23 @@ async function interactiveMenu() {
 function displayHelp() {
   console.log(`
 UTILISATION :
-  secure-student-cli                     Lance l'interface interactive complete
-  secure-student-cli add                 Ajoute un etudiant directement
-  secure-student-cli list                Affiche tous les releves de notes
-  secure-student-cli search <query>      Recherche un etudiant par identifiant ou nom
-  secure-student-cli transcript <id>     Affiche le bulletin officiel d'un etudiant
-  secure-student-cli delete <id>         Supprime un etudiant du coffre
-  secure-student-cli status              Affiche les parametres de securite cryptographiques
-  secure-student-cli --help, -h          Affiche cette documentation d'aide
+  ssc (ou secure-student-cli)            Lance l'interface interactive complete
+  ssc add                                Ajoute un etudiant directement
+  ssc list                               Affiche tous les releves de notes
+  ssc search <query>                     Recherche un etudiant par identifiant ou nom
+  ssc transcript <id>                    Affiche le bulletin officiel d'un etudiant
+  ssc delete <id>                        Supprime un etudiant du coffre
+  ssc status                             Affiche les parametres de securite cryptographiques
+  ssc --help, -h                         Affiche cette documentation d'aide
 
 EXEMPLES :
-  secure-student-cli
-  secure-student-cli add
-  secure-student-cli list
-  secure-student-cli search "BENALI"
-  secure-student-cli transcript "2024001"
-  secure-student-cli delete "2024001"
-  secure-student-cli status
+  ssc
+  ssc add
+  ssc list
+  ssc search "BENALI"
+  ssc transcript "2024001"
+  ssc delete "2024001"
+  ssc status
 `);
 }
 

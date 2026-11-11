@@ -2,7 +2,7 @@
  * ============================================================================
  * MODULE DE SECURITE CRYPTOGRAPHIQUE
  * ============================================================================
- * Auteurs : Salhi Issam & Chouikha Imane
+ * Auteurs : Salhi Issam & Chouik Imane
  * Niveau : 3eme annee L3 ISIL (LMD) - Module PAWEB
  * Algorithme : AES-256-GCM (Authenticated Encryption)
  * Derivation de cle : scryptSync (KDF - Key Derivation Function)

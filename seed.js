@@ -2,7 +2,7 @@
  * ============================================================================
  * SCRIPT DE DEMONSTRATION PEDAGOGIQUE (SEED DATA)
  * ============================================================================
- * Auteurs : Salhi Issam & Chouikha Imane (L3 ISIL - Module PAWEB)
+ * Auteurs : Salhi Issam & Chouik Imane (L3 ISIL - Module PAWEB)
  * ============================================================================
  */
 
@@ -18,7 +18,7 @@ console.log(`
 
 const sampleStudents = [
   { id: '2024001', nom: 'SALHI', prenom: 'Issam', filiere: 'L3 ISIL', module: 'PAWEB', grade: 18.5 },
-  { id: '2024002', nom: 'CHOUIKHA', prenom: 'Imane', filiere: 'L3 ISIL', module: 'PAWEB', grade: 18.0 },
+  { id: '2024002', nom: 'CHOUIK', prenom: 'Imane', filiere: 'L3 ISIL', module: 'PAWEB', grade: 18.0 },
   { id: '2024003', nom: 'BENALI', prenom: 'Youcef', filiere: 'L3 ISIL', module: 'PAWEB', grade: 15.75 },
   { id: '2024004', nom: 'MEZIANI', prenom: 'Amine', filiere: 'L3 ISIL', module: 'PAWEB', grade: 13.5 },
   { id: '2024005', nom: 'KACI', prenom: 'Nadia', filiere: 'L3 ISIL', module: 'PAWEB', grade: 11.0 }

@@ -2,7 +2,7 @@
  * ============================================================================
  * SUITE DE TESTS AUTOMATISEE
  * ============================================================================
- * Auteurs : Salhi Issam & Chouikha Imane (L3 ISIL - Module PAWEB)
+ * Auteurs : Salhi Issam & Chouik Imane (L3 ISIL - Module PAWEB)
  * ============================================================================
  */
 

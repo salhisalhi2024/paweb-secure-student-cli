@@ -2,7 +2,7 @@
  * ============================================================================
  * MODULE D'INTERACTION TERMINAL
  * ============================================================================
- * Auteurs : Salhi Issam & Chouikha Imane (L3 ISIL - Module PAWEB)
+ * Auteurs : Salhi Issam & Chouik Imane (L3 ISIL - Module PAWEB)
  * Fonctionnalite cle : Saisie masquee du mot de passe (Raw Mode)
  * ============================================================================
  */
