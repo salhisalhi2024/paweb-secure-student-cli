@@ -1,0 +1,25 @@
+{
+  "name": "paweb-secure-student-cli",
+  "version": "1.0.0",
+  "description": "CLI sécurisé pour le stockage, le chiffrement et la consultation des relevés d'étudiants (AES-256-GCM)",
+  "main": "index.js",
+  "type": "module",
+  "bin": {
+    "secure-student-cli": "./index.js"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "test": "node test.js"
+  },
+  "keywords": [
+    "cli",
+    "security",
+    "aes-256-gcm",
+    "encryption",
+    "academic",
+    "paweb",
+    "offline"
+  ],
+  "author": "Salhi Issam & Chouikha Imane (3ème année L3 ISIL - PAWEB)",
+  "license": "MIT"
+}
