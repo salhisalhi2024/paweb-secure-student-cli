@@ -5,3 +5,4 @@ yarn-error.log*
 data/*.enc.json
 .DS_Store
 Thumbs.db
+

@@ -118,3 +118,4 @@ export function listAllStudents(masterPassword) {
 
   return { students, stats };
 }
+

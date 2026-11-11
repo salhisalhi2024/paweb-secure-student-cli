@@ -99,3 +99,4 @@ export function saveStudents(students, masterPassword) {
 export function getVaultPath() {
   return VAULT_FILE;
 }
+

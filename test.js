@@ -119,3 +119,4 @@ if (fs.existsSync(vaultPath)) {
 console.log('\n=================================================================');
 console.log('🎉 TOUS LES TESTS CRYPTOGRAPHIQUES ET FONCTIONNELS ONT RÉUSSI !');
 console.log('=================================================================\n');
+

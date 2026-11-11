@@ -98,3 +98,4 @@ export function askPassword(promptMessage = 'Entrez le mot de passe maître : ')
     stdin.on('data', onData);
   });
 }
+

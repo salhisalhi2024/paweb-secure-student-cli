@@ -11,6 +11,11 @@
 
 Dans le cadre du module **PAWEB**, le **Sujet 2** impose la création d'un outil en ligne de commande (CLI) autonome développé avec **Node.js**, capable de gérer des données académiques hautement sensibles (identifiants d'étudiants, relevés de notes, moyennes).
 
+<div align="center">
+  <img src="./assets/sujet-2-paweb.jpg" alt="Énoncé Officiel Sujet 2 - PAWEB" width="600" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); margin: 15px 0;" />
+  <p><em>Figure : Énoncé officiel du Sujet 2 (PAWEB - 3ème LMD ISIL) remis le 28-10-2026.</em></p>
+</div>
+
 Les contraintes de sécurité formulées sont strictes :
 1. **Algorithme de chiffrement :** Utilisation impérative d'**AES-256-GCM** (Galois/Counter Mode).
 2. **Zéro API Web :** Fonctionnement à 100% hors-ligne (Air-gapped / Local-only).
@@ -61,6 +66,8 @@ paweb-secure-student-cli/
 ├── index.js                  # Point d'entrée, parseur de commandes CLI & menu interactif
 ├── package.json              # Configuration du projet et commande globale
 ├── test.js                   # Suite de tests cryptographiques et fonctionnels
+├── assets/
+│   └── sujet-2-paweb.jpg     # Copie de l'énoncé officiel du sujet
 ├── src/
 │   ├── crypto.js             # Moteur cryptographique (scrypt, AES-GCM, IV, Salt, AuthTag)
 │   ├── storage.js            # Couche d'accès aux données chiffrées sur le File System
@@ -180,3 +187,4 @@ Le développement de ce projet répond point par point au cahier des charges du 
 
 ---
 *Document rédigé par Salhi Issam & Chouikha Imane – L3 ISIL – PAWEB.*
+

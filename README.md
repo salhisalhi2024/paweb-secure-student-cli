@@ -6,9 +6,19 @@
 
 ### 👨‍💻 Contexte Académique & Auteurs
 - **Auteurs :** Salhi Issam & Chouikha Imane
-- **Niveau :** 3ème année Licence Informatique (L3 ISIL)
+- **Niveau :** 3ème année Licence Informatique (L3 ISIL - 3ème LMD)
 - **Module :** PAWEB (Programmation et Applications Web)
 - **Projet :** Sujet 2 – Système de gestion locale sécurisée de relevés de notes
+- **Date limite de remise :** 18 Novembre 2026
+
+---
+
+## 📄 Énoncé Officiel du Projet (Sujet 2 - PAWEB)
+
+<div align="center">
+  <img src="./assets/sujet-2-paweb.jpg" alt="Énoncé Officiel Sujet 2 - PAWEB L3 ISIL" width="650" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); margin: 15px 0;" />
+  <p><em>Figure 1 : Sujet officiel n°2 distribué dans le cadre du module PAWEB (L3 ISIL).</em></p>
+</div>
 
 ---
 
@@ -147,6 +157,8 @@ paweb-secure-student-cli/
 ├── test.js                       # Suite de tests cryptographiques et fonctionnels
 ├── README.md                     # Manuel utilisateur et documentation du projet
 ├── PROCESSUS_DE_DEVELOPPEMENT.md # Journal de bord détaillé du développement
+├── assets/
+│   └── sujet-2-paweb.jpg         # Copie de l'énoncé officiel du sujet
 └── src/
     ├── crypto.js                 # Cœur cryptographique (AES-256-GCM, scryptSync, IV, Salt)
     ├── storage.js                # Gestion du stockage local chiffré (Zero Plain Text)
@@ -172,3 +184,4 @@ paweb-secure-student-cli/
 
 Projet réalisé dans le cadre du module **PAWEB** par les étudiants **Salhi Issam & Chouikha Imane** (L3 ISIL).  
 Distribué sous licence **MIT**.
+
